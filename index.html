@@ -27,7 +27,16 @@
   #gate .gate-error.show { opacity: 1; }
   #gate .gate-footer { position: absolute; bottom: 40px; font-size: 10px; opacity: 0.3; letter-spacing: 3px; text-transform: uppercase; }
   body.locked { overflow: hidden; cursor: auto !important; }
-  body.locked > section, body.locked > .marquee, body.locked > .sku-marquee, body.locked > .grain, body.locked > .cursor-glow, body.locked > .cursor-dot { display: none !important; }
+  body.locked > section, body.locked > .marquee, body.locked > .sku-marquee, body.locked > .grain, body.locked .floating-packet { display: none !important; }
+  /* Floating packet — follows cursor across entire viewport (mirrors v5 deck) */
+  .floating-packet {
+    position: fixed; top: 0; left: 0; z-index: 100;
+    width: 120px; max-width: 120px; pointer-events: none;
+    filter: drop-shadow(0 12px 36px rgba(0,0,0,0.5));
+    transform: translate(-50%, -50%) translate3d(0, 0, 0);
+    will-change: transform; opacity: 1;
+  }
+  @media (max-width: 768px), (hover: none) { .floating-packet { display: none; } }
   @media (max-width: 768px) { #gate .gate-title { font-size: 48px; } #gate input { width: 240px; } }
 </style>
 <style>
@@ -56,39 +65,7 @@
     -webkit-font-smoothing: antialiased;
     font-weight: 400;
     overflow-x: hidden;
-    cursor: none;
   }
-  @media (hover: none) and (pointer: coarse) { body { cursor: auto; } }
-
-  /* ==================== CURSOR GLOW (desktop only) ==================== */
-  .cursor-glow {
-    position: fixed;
-    top: 0; left: 0;
-    width: 500px; height: 500px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(173,66,54,0.22) 0%, rgba(173,66,54,0.08) 30%, transparent 65%);
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    z-index: 9998;
-    transition: opacity 0.4s ease;
-    mix-blend-mode: screen;
-    will-change: transform;
-  }
-  .cursor-dot {
-    position: fixed;
-    top: 0; left: 0;
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--signal);
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    box-shadow: 0 0 12px rgba(173,66,54,0.8);
-    transition: width 0.2s ease, height 0.2s ease;
-    will-change: transform;
-  }
-  .cursor-dot.hover-state { width: 32px; height: 32px; background: transparent; border: 1.5px solid var(--signal); box-shadow: none; }
-  @media (hover: none) and (pointer: coarse) { .cursor-glow, .cursor-dot { display: none; } }
 
   /* ==================== FILM GRAIN ==================== */
   .grain {
@@ -932,7 +909,7 @@
   @media print {
     @page { size: letter; margin: 0.5in; }
     body { background: var(--deep-evening) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; cursor: auto; }
-    .cursor-glow, .cursor-dot, .grain, .shockwaves, .scroll-indicator, .marquee { display: none !important; }
+    .floating-packet, .grain, .shockwaves, .scroll-indicator, .marquee { display: none !important; }
     section { page-break-inside: avoid; min-height: auto; padding: 40px; }
     .arrival { page-break-after: always; min-height: 9in; }
     .cta .cta-button, .cta .cta-prompt, .cta .cta-fine-print { display: none; }
@@ -988,8 +965,7 @@
 </script>
 
 <div class="grain"></div>
-<div class="cursor-glow" id="cursorGlow"></div>
-<div class="cursor-dot" id="cursorDot"></div>
+<img src="signal_packet_float.png" alt="" class="floating-packet" id="floatingPacket" aria-hidden="true">
 
 <!-- ==================== 1 • ARRIVAL ==================== -->
 <section class="arrival">
@@ -1230,35 +1206,31 @@
   }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
   document.querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
 
-  // Cursor glow (desktop only)
-  const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (isDesktop) {
-    const glow = document.getElementById('cursorGlow');
-    const dot = document.getElementById('cursorDot');
-    let targetX = window.innerWidth / 2, targetY = window.innerHeight / 2;
-    let glowX = targetX, glowY = targetY;
-    let dotX = targetX, dotY = targetY;
-
-    window.addEventListener('mousemove', (e) => { targetX = e.clientX; targetY = e.clientY; });
-    window.addEventListener('mouseleave', () => { glow.style.opacity = '0'; dot.style.opacity = '0'; });
-    window.addEventListener('mouseenter', () => { glow.style.opacity = '1'; dot.style.opacity = '1'; });
-
-    function tick() {
-      glowX += (targetX - glowX) * 0.08;
-      glowY += (targetY - glowY) * 0.08;
-      dotX += (targetX - dotX) * 0.25;
-      dotY += (targetY - dotY) * 0.25;
-      glow.style.transform = `translate(${glowX}px, ${glowY}px) translate(-50%, -50%)`;
-      dot.style.transform = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
-      requestAnimationFrame(tick);
-    }
-    tick();
-
-    document.querySelectorAll('[data-hover], a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => dot.classList.add('hover-state'));
-      el.addEventListener('mouseleave', () => dot.classList.remove('hover-state'));
+  /* Floating packet — follows cursor with eased lerp. Disabled on touch/mobile. Hidden while locked. */
+  (function() {
+    if (window.matchMedia('(max-width: 768px)').matches) return;
+    if (window.matchMedia('(hover: none)').matches) return;
+    const packet = document.getElementById('floatingPacket');
+    if (!packet) return;
+    let tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
+    const setDefault = () => {
+      tx = window.innerWidth * 0.85; ty = window.innerHeight * 0.82;
+      cx = tx; cy = ty;
+      packet.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+    };
+    setDefault();
+    document.addEventListener('mousemove', (e) => {
+      tx = e.clientX + 70; ty = e.clientY + 60;
+      if (!raf) animate();
     });
-  }
+    const animate = () => {
+      cx += (tx - cx) * 0.09; cy += (ty - cy) * 0.09;
+      packet.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+      if (Math.abs(tx - cx) > 0.3 || Math.abs(ty - cy) > 0.3) raf = requestAnimationFrame(animate);
+      else raf = null;
+    };
+    window.addEventListener('resize', setDefault);
+  })();
 </script>
 
 </body>
