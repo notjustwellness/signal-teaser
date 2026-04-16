@@ -242,56 +242,64 @@
     50% { opacity: 0.5; height: 70px; }
   }
 
-  /* ==================== QUOTE BAND (Szent-Györgyi) ==================== */
+  /* ==================== QUOTE BAND — single-line scrolling ==================== */
   .quote-band {
-    padding: 96px 40px;
+    overflow: hidden;
     background: var(--deep-evening);
     border-top: 1px solid rgba(246,239,234,0.08);
     border-bottom: 1px solid rgba(246,239,234,0.08);
+    padding: 44px 0;
     position: relative;
-    text-align: center;
-    z-index: 1;
-    min-height: 0;
-    display: block;
   }
-  .quote-band::before {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 600px; height: 300px;
-    border-radius: 50%;
-    background: radial-gradient(ellipse, rgba(173,66,54,0.12) 0%, transparent 70%);
-    pointer-events: none;
+  .quote-band .marquee-track {
+    display: flex;
+    gap: 80px;
+    white-space: nowrap;
+    animation: marquee 90s linear infinite;
+    width: max-content;
+    align-items: baseline;
   }
-  .szent-quote {
+  .quote-band .quote-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 32px;
+    flex-shrink: 0;
+  }
+  .quote-band .szent-quote {
     font-family: var(--font-display);
-    font-size: 44px;
+    font-size: 40px;
     font-weight: 900;
-    line-height: 1.2;
     letter-spacing: -1px;
     color: rgba(246,239,234,0.95);
     text-transform: lowercase;
-    max-width: 960px;
-    margin: 0 auto 24px;
-    position: relative;
-    z-index: 1;
+    line-height: 1;
+    white-space: nowrap;
   }
-  .szent-attribution {
+  .quote-band .szent-attribution {
     font-family: var(--font-body);
     font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--rose-linen);
-    opacity: 0.55;
-    font-weight: 500;
+    color: var(--signal);
+    opacity: 0.85;
+    font-weight: 600;
+    white-space: nowrap;
     position: relative;
-    z-index: 1;
+    top: -6px;
+  }
+  .quote-band .quote-divider {
+    color: var(--signal);
+    font-size: 32px;
+    opacity: 0.5;
+    line-height: 1;
+    align-self: center;
   }
   @media (max-width: 768px) {
-    .quote-band { padding: 64px 24px; }
-    .szent-quote { font-size: 28px; letter-spacing: -0.5px; }
-    .szent-attribution { font-size: 10px; letter-spacing: 2px; }
+    .quote-band { padding: 28px 0; }
+    .quote-band .szent-quote { font-size: 22px; letter-spacing: -0.5px; }
+    .quote-band .szent-attribution { font-size: 9px; letter-spacing: 2px; top: -3px; }
+    .quote-band .marquee-track { gap: 48px; animation-duration: 70s; }
+    .quote-band .quote-item { gap: 20px; }
   }
 
   /* ==================== MARQUEE TICKER ==================== */
@@ -1037,10 +1045,25 @@
   <div class="scroll-indicator"></div>
 </section>
 
-<!-- ==================== QUOTE (replaces scrolling marquee) ==================== -->
+<!-- ==================== QUOTE BAND — single-line scrolling Szent-Györgyi ==================== -->
 <section class="quote-band">
-  <blockquote class="szent-quote">&ldquo;treating humans without the concept of energy is treating dead matter.&rdquo;</blockquote>
-  <div class="szent-attribution">&mdash; Albert Szent-Gy&ouml;rgyi &nbsp;&middot;&nbsp; Nobel laureate, physiology &amp; medicine 1937</div>
+  <div class="marquee-track">
+    <span class="quote-item">
+      <span class="szent-quote">&ldquo;treating humans without the concept of energy is treating dead matter.&rdquo;</span>
+      <span class="szent-attribution">ALBERT SZENT-GY&Ouml;RGYI &middot; NOBEL LAUREATE 1937</span>
+    </span>
+    <span class="quote-divider">/</span>
+    <span class="quote-item">
+      <span class="szent-quote">&ldquo;treating humans without the concept of energy is treating dead matter.&rdquo;</span>
+      <span class="szent-attribution">ALBERT SZENT-GY&Ouml;RGYI &middot; NOBEL LAUREATE 1937</span>
+    </span>
+    <span class="quote-divider">/</span>
+    <span class="quote-item">
+      <span class="szent-quote">&ldquo;treating humans without the concept of energy is treating dead matter.&rdquo;</span>
+      <span class="szent-attribution">ALBERT SZENT-GY&Ouml;RGYI &middot; NOBEL LAUREATE 1937</span>
+    </span>
+    <span class="quote-divider">/</span>
+  </div>
 </section>
 
 <!-- ==================== 2 • SENSATION ==================== -->
