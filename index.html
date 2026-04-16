@@ -378,13 +378,19 @@
   .sku-mood {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center;
     opacity: 0;
     transform: scale(1.08);
     transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.3, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1);
     pointer-events: none;
     z-index: 0;
+    overflow: hidden;
+  }
+  .sku-mood img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
   }
   .sku-card:hover .sku-mood { opacity: 1; transform: scale(1); }
   /* Darkening overlay so text stays readable when mood is active */
@@ -392,18 +398,9 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(26,20,16,0.5) 0%, rgba(26,20,16,0.75) 100%);
+    background: linear-gradient(180deg, rgba(26,20,16,0.55) 0%, rgba(26,20,16,0.82) 100%);
+    pointer-events: none;
   }
-
-  /* Per-SKU mood gradients — each evokes the variant's identity */
-  .mood-glow    { background: radial-gradient(circle at 35% 40%, #f4c5a8 0%, #e89068 35%, #8a3a2a 70%, #3a1a12 100%); }
-  .mood-rise    { background: linear-gradient(165deg, #f5b56a 0%, #e8764a 35%, #9a3c2a 75%, #2d1410 100%); }
-  .mood-rest    { background: radial-gradient(ellipse at 50% 30%, #5d4a85 0%, #2e2249 35%, #141024 75%, #0a0612 100%); }
-  .mood-edge    { background: linear-gradient(115deg, #d5dde8 0%, #7a96b5 30%, #334a6a 65%, #121a28 100%); }
-  .mood-still   { background: radial-gradient(circle at 30% 70%, #b8c2ce 0%, #6a7886 35%, #2c3540 75%, #10161e 100%); }
-  .mood-surge   { background: linear-gradient(35deg, #e85a4c 0%, #AD4236 45%, #6b1f18 80%, #220a08 100%); }
-  .mood-move    { background: linear-gradient(145deg, #6ab89f 0%, #2f8a6d 40%, #145238 75%, #081a12 100%); }
-  .mood-guard   { background: radial-gradient(ellipse at 65% 40%, #3d7555 0%, #1f4a35 40%, #0d2418 75%, #050d08 100%); }
   .sku-card .sku-order {
     position: absolute;
     top: 20px; left: 24px;
@@ -1049,7 +1046,7 @@
   <div class="marquee-track">
     <!-- 01 GLOW — launch -->
     <div class="sku-card">
-      <div class="sku-mood mood-glow"></div>
+      <div class="sku-mood"><img src="sku_images/glow.jpg" alt=""></div>
       <div class="sku-order">01</div>
       <div class="sku-status">LAUNCH</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
@@ -1059,7 +1056,7 @@
     </div>
     <!-- 02 RISE -->
     <div class="sku-card">
-      <div class="sku-mood mood-rise"></div>
+      <div class="sku-mood"><img src="sku_images/rise.jpg" alt=""></div>
       <div class="sku-order">02</div>
       <div class="sku-status">WAVE 01</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
@@ -1069,7 +1066,7 @@
     </div>
     <!-- 03 REST -->
     <div class="sku-card">
-      <div class="sku-mood mood-rest"></div>
+      <div class="sku-mood"><img src="sku_images/rest.jpg" alt=""></div>
       <div class="sku-order">03</div>
       <div class="sku-status">WAVE 01</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
@@ -1079,7 +1076,7 @@
     </div>
     <!-- 04 EDGE -->
     <div class="sku-card">
-      <div class="sku-mood mood-edge"></div>
+      <div class="sku-mood"><img src="sku_images/edge.jpg" alt=""></div>
       <div class="sku-order">04</div>
       <div class="sku-status">WAVE 02</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
@@ -1089,7 +1086,7 @@
     </div>
     <!-- 05 STILL -->
     <div class="sku-card">
-      <div class="sku-mood mood-still"></div>
+      <div class="sku-mood"><img src="sku_images/still.jpg" alt=""></div>
       <div class="sku-order">05</div>
       <div class="sku-status">WAVE 02</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
@@ -1099,7 +1096,7 @@
     </div>
     <!-- 06 SURGE -->
     <div class="sku-card">
-      <div class="sku-mood mood-surge"></div>
+      <div class="sku-mood"><img src="sku_images/surge.jpg" alt=""></div>
       <div class="sku-order">06</div>
       <div class="sku-status">WAVE 03</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
@@ -1109,7 +1106,7 @@
     </div>
     <!-- 07 MOVE -->
     <div class="sku-card">
-      <div class="sku-mood mood-move"></div>
+      <div class="sku-mood"><img src="sku_images/move.jpg" alt=""></div>
       <div class="sku-order">07</div>
       <div class="sku-status">WAVE 03</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
@@ -1119,7 +1116,7 @@
     </div>
     <!-- 08 GUARD -->
     <div class="sku-card">
-      <div class="sku-mood mood-guard"></div>
+      <div class="sku-mood"><img src="sku_images/guard.jpg" alt=""></div>
       <div class="sku-order">08</div>
       <div class="sku-status">LATER</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
@@ -1129,49 +1126,49 @@
     </div>
     <!-- duplicate for seamless loop -->
     <div class="sku-card">
-      <div class="sku-mood mood-glow"></div>
+      <div class="sku-mood"><img src="sku_images/glow.jpg" alt=""></div>
       <div class="sku-order">01</div><div class="sku-status">LAUNCH</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
       <div class="sku-separator"></div><div class="sku-name">glow</div><div class="sku-promise">your daily signal</div>
     </div>
     <div class="sku-card">
-      <div class="sku-mood mood-rise"></div>
+      <div class="sku-mood"><img src="sku_images/rise.jpg" alt=""></div>
       <div class="sku-order">02</div><div class="sku-status">WAVE 01</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
       <div class="sku-separator"></div><div class="sku-name">rise</div><div class="sku-promise">start your day</div>
     </div>
     <div class="sku-card">
-      <div class="sku-mood mood-rest"></div>
+      <div class="sku-mood"><img src="sku_images/rest.jpg" alt=""></div>
       <div class="sku-order">03</div><div class="sku-status">WAVE 01</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
       <div class="sku-separator"></div><div class="sku-name">rest</div><div class="sku-promise">end your day</div>
     </div>
     <div class="sku-card">
-      <div class="sku-mood mood-edge"></div>
+      <div class="sku-mood"><img src="sku_images/edge.jpg" alt=""></div>
       <div class="sku-order">04</div><div class="sku-status">WAVE 02</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
       <div class="sku-separator"></div><div class="sku-name">edge</div><div class="sku-promise">think clearly</div>
     </div>
     <div class="sku-card">
-      <div class="sku-mood mood-still"></div>
+      <div class="sku-mood"><img src="sku_images/still.jpg" alt=""></div>
       <div class="sku-order">05</div><div class="sku-status">WAVE 02</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
       <div class="sku-separator"></div><div class="sku-name">still</div><div class="sku-promise">come back to zero</div>
     </div>
     <div class="sku-card">
-      <div class="sku-mood mood-surge"></div>
+      <div class="sku-mood"><img src="sku_images/surge.jpg" alt=""></div>
       <div class="sku-order">06</div><div class="sku-status">WAVE 03</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
       <div class="sku-separator"></div><div class="sku-name">surge</div><div class="sku-promise">activate what you ate</div>
     </div>
     <div class="sku-card">
-      <div class="sku-mood mood-move"></div>
+      <div class="sku-mood"><img src="sku_images/move.jpg" alt=""></div>
       <div class="sku-order">07</div><div class="sku-status">WAVE 03</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
       <div class="sku-separator"></div><div class="sku-name">move</div><div class="sku-promise">stay mobile</div>
     </div>
     <div class="sku-card">
-      <div class="sku-mood mood-guard"></div>
+      <div class="sku-mood"><img src="sku_images/guard.jpg" alt=""></div>
       <div class="sku-order">08</div><div class="sku-status">LATER</div>
       <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
       <div class="sku-separator"></div><div class="sku-name">guard</div><div class="sku-promise">guard the wall</div>
