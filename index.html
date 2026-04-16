@@ -27,7 +27,7 @@
   #gate .gate-error.show { opacity: 1; }
   #gate .gate-footer { position: absolute; bottom: 40px; font-size: 10px; opacity: 0.3; letter-spacing: 3px; text-transform: uppercase; }
   body.locked { overflow: hidden; cursor: auto !important; }
-  body.locked > section, body.locked > .marquee, body.locked > .sku-marquee, body.locked > .grain, body.locked .floating-packet { display: none !important; }
+  body.locked > section, body.locked > .marquee, body.locked > .sku-marquee, body.locked .floating-packet { display: none !important; }
   /* Floating packet — follows cursor across entire viewport (mirrors v5 deck) */
   .floating-packet {
     position: fixed; top: 0; left: 0; z-index: 100;
@@ -67,16 +67,7 @@
     overflow-x: hidden;
   }
 
-  /* ==================== FILM GRAIN ==================== */
-  .grain {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 9997;
-    opacity: 0.04;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  }
+  /* Film grain removed — animation budget reduced for Gen Z clarity over decoration. */
 
   section { position: relative; padding: 100px 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; z-index: 1; }
 
@@ -515,8 +506,8 @@
     .sku-marquee { padding: 32px 0; }
   }
 
-  /* ==================== SECTION 2 — SENSATION ==================== */
-  .sensation { min-height: 80vh; padding: 140px 40px; position: relative; }
+  /* ==================== SECTION 2 — SENSATION (condensed) ==================== */
+  .sensation { min-height: 60vh; padding: 100px 40px; position: relative; }
   .sensation::before {
     content: '';
     position: absolute;
@@ -544,17 +535,30 @@
     letter-spacing: -2px;
   }
   .sensation .line-1 em { color: var(--signal); font-style: normal; }
-  .sensation .line-2, .sensation .line-3 {
-    font-size: 18px;
-    font-weight: 300;
+  .sensation .line-specs {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
     color: var(--rose-linen);
-    opacity: 0.7;
-    text-transform: lowercase;
-    letter-spacing: 1px;
+    opacity: 0.75;
     position: relative;
     z-index: 2;
   }
-  .sensation .line-2 { margin-bottom: 20px; }
+  .sensation .line-specs .dot {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--signal);
+    opacity: 0.8;
+  }
 
   /* ==================== SECTION 3 — PROMISE (BRIGHT) ==================== */
   .promise {
@@ -861,6 +865,27 @@
     letter-spacing: 0.5px;
   }
 
+  /* Launch timing badge — sits above CTA prompt */
+  .launch-badge {
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rose-linen);
+    background: rgba(26,20,16,0.35);
+    border: 1px solid rgba(246,239,234,0.4);
+    padding: 8px 16px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 28px;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+  }
+  .launch-badge span { opacity: 0.55; font-weight: 400; }
+
   /* ==================== SECTION 6 — CTA (FULL SIGNAL RED) ==================== */
   .cta {
     min-height: 60vh;
@@ -955,6 +980,16 @@
     opacity: 0.9;
     display: inline-block;
   }
+  .close .founder-signal {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--rose-linen);
+    opacity: 0.55;
+    font-weight: 400;
+    margin-bottom: 14px;
+    letter-spacing: 0.3px;
+    text-transform: lowercase;
+  }
   .close .confidentiality {
     font-size: 10px;
     color: var(--rose-linen);
@@ -972,7 +1007,7 @@
     .company-overline { font-size: 10px; letter-spacing: 3px; margin-bottom: 24px; }
     .arrival-tagline { font-size: 15px; letter-spacing: 1.5px; }
     .sensation .line-1 { font-size: 32px; margin-bottom: 40px; }
-    .sensation .line-2, .sensation .line-3 { font-size: 15px; }
+    .sensation .line-specs { font-size: 11px; letter-spacing: 2px; gap: 10px; }
     .promise { padding: 100px 24px; }
     .promise .headline { font-size: 44px; letter-spacing: -0.5px; }
     .promise .body { font-size: 14px; }
@@ -1003,7 +1038,7 @@
   @media print {
     @page { size: letter; margin: 0.5in; }
     body { background: var(--deep-evening) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; cursor: auto; }
-    .floating-packet, .grain, .shockwaves, .scroll-indicator, .marquee { display: none !important; }
+    .floating-packet, .shockwaves, .scroll-indicator, .marquee { display: none !important; }
     section { page-break-inside: avoid; min-height: auto; padding: 40px; }
     .arrival { page-break-after: always; min-height: 9in; }
     .cta .cta-button, .cta .cta-prompt, .cta .cta-fine-print { display: none; }
@@ -1024,7 +1059,7 @@
 <div id="gate">
   <div class="gate-overline">INSDR Wellness Co. &mdash; Confidential</div>
   <div class="gate-title" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
-  <div class="gate-subtitle">enter password to view.</div>
+  <div class="gate-subtitle">an early draft. kept close until launch.<br>password from your invitation.</div>
   <form onsubmit="return checkPass(event)">
     <input type="password" id="gate-pass" autocomplete="off" autofocus placeholder="password">
     <button type="submit">Enter</button>
@@ -1058,7 +1093,6 @@
   })();
 </script>
 
-<div class="grain"></div>
 <img src="signal_packet_float.png" alt="" class="floating-packet" id="floatingPacket" aria-hidden="true">
 
 <!-- ==================== 1 • ARRIVAL ==================== -->
@@ -1100,11 +1134,18 @@
   </div>
 </section>
 
-<!-- ==================== 2 • SENSATION ==================== -->
+<!-- ==================== 2 • SENSATION (condensed) ==================== -->
 <section class="sensation">
   <div class="line-1 reveal">you feel it <em>the second</em> you bite down.</div>
-  <div class="line-2 reveal delay-1">a chew. 90 seconds. every day.</div>
-  <div class="line-3 reveal delay-2">no water. no mixing. no forgetting.</div>
+  <div class="line-specs reveal delay-1">
+    <span>one chew</span>
+    <span class="dot"></span>
+    <span>90 seconds</span>
+    <span class="dot"></span>
+    <span>no water</span>
+    <span class="dot"></span>
+    <span>every morning</span>
+  </div>
 </section>
 
 <!-- ==================== 3 • PROMISE ==================== -->
@@ -1258,15 +1299,15 @@
   <div class="truths-grid">
     <div class="truth-card reveal" data-hover>
       <span class="num">01</span>
-      <div class="statement">every ingredient named. every dose printed. &ldquo;proprietary blend&rdquo; is a red flag.</div>
+      <div class="statement">every ingredient named. every dose printed. &ldquo;proprietary blend&rdquo; = red flag.</div>
     </div>
     <div class="truth-card reveal delay-1" data-hover>
       <span class="num">02</span>
-      <div class="statement">fewer inactive ingredients. every active earns its spot. flavored by fruit, not a flavor scientist.</div>
+      <div class="statement">fewer inactives. every active earns its spot. flavor from fruit, not a lab.</div>
     </div>
     <div class="truth-card reveal delay-2" data-hover>
       <span class="num">03</span>
-      <div class="statement">based in science, not bro science. clinically relevant dosages, not trace-amount theater. receipts in the appendix.</div>
+      <div class="statement">based in science, not bro science. clinical doses. receipts in the appendix.</div>
     </div>
   </div>
 </section>
@@ -1279,22 +1320,25 @@
   </div>
   <div class="tension-reject-caption reveal delay-1">not a gummy.</div>
   <div class="tension-reject-sublabel reveal delay-1">not another supplement</div>
-  <div class="main reveal delay-2">there's <em>more</em> to this than we can show you here.</div>
-  <div class="sub reveal delay-2">a format nobody's doing. a thesis the category hasn't heard yet.</div>
-  <div class="call reveal delay-3">if you want the full picture, send a signal.</div>
+  <div class="main reveal delay-2">we're doing the <em>real</em> work in private.</div>
+  <div class="sub reveal delay-2">a format nobody's doing. a thesis the category hasn't heard yet. the people in the room get the full build.</div>
+  <div class="call reveal delay-3">want in? send a signal.</div>
 </section>
 
 <!-- ==================== 6 • CTA ==================== -->
 <section class="cta">
-  <div class="cta-prompt reveal">leave a note. we'll reach out personally.</div>
-  <a class="cta-button reveal delay-1" href="mailto:damon.sun@insdrwellness.com?subject=signal%20%E2%80%94%20I%27m%20interested&body=hi%20damon%2C%0A%0AI%20saw%20the%20signal%20teaser.%20tell%20me%20more.%0A%0A" data-hover>SEND A SIGNAL</a>
-  <div class="cta-fine-print reveal delay-2">no spam. no newsletter. one personal reply.</div>
+  <div class="launch-badge reveal"><span>launching</span> late 2026</div>
+  <div class="cta-prompt reveal delay-1">leave a note. we'll reach out personally.</div>
+  <a class="cta-button reveal delay-2" href="mailto:damon.sun@insdrwellness.com?subject=signal%20%E2%80%94%20I%27m%20interested&body=hi%20damon%2C%0A%0AI%20saw%20the%20signal%20teaser.%20tell%20me%20more.%0A%0A" data-hover>SEND A SIGNAL</a>
+  <div class="cta-fine-print reveal delay-3">or DM <a href="https://instagram.com/insdrwellness" target="_blank" rel="noopener" style="color: inherit; text-decoration: underline; text-underline-offset: 3px;">@insdrwellness</a></div>
+  <div class="cta-fine-print reveal delay-3" style="margin-top: 10px; opacity: 0.22;">no spam. no newsletter. one personal reply.</div>
 </section>
 
 <!-- ==================== 7 • CLOSE ==================== -->
 <section class="close">
   <div class="wordmark wordmark-small" aria-label="signal"><span class="char accent">/</span><span class="char">s</span><span class="char">ɪ</span><span class="char">ɡ</span><span class="char accent">ˈ</span><span class="char">n</span><span class="char">ɑ</span><span class="char accent">ː</span><span class="char">l</span><span class="char accent">/</span></div>
   <div class="company-line"><img src="logo/insdr_logo_light.png" alt="INSDR" class="insdr-logo"> WELLNESS CO. · 2026</div>
+  <div class="founder-signal">made by damon. first product. accept no trend-chasers.</div>
   <div class="confidentiality">shared with you personally. please don't post publicly.</div>
 </section>
 
