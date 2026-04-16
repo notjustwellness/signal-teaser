@@ -242,6 +242,58 @@
     50% { opacity: 0.5; height: 70px; }
   }
 
+  /* ==================== QUOTE BAND (Szent-Györgyi) ==================== */
+  .quote-band {
+    padding: 96px 40px;
+    background: var(--deep-evening);
+    border-top: 1px solid rgba(246,239,234,0.08);
+    border-bottom: 1px solid rgba(246,239,234,0.08);
+    position: relative;
+    text-align: center;
+    z-index: 1;
+    min-height: 0;
+    display: block;
+  }
+  .quote-band::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(173,66,54,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .szent-quote {
+    font-family: var(--font-display);
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: -1px;
+    color: rgba(246,239,234,0.95);
+    text-transform: lowercase;
+    max-width: 960px;
+    margin: 0 auto 24px;
+    position: relative;
+    z-index: 1;
+  }
+  .szent-attribution {
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rose-linen);
+    opacity: 0.55;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+  }
+  @media (max-width: 768px) {
+    .quote-band { padding: 64px 24px; }
+    .szent-quote { font-size: 28px; letter-spacing: -0.5px; }
+    .szent-attribution { font-size: 10px; letter-spacing: 2px; }
+  }
+
   /* ==================== MARQUEE TICKER ==================== */
   .marquee {
     overflow: hidden;
@@ -985,23 +1037,11 @@
   <div class="scroll-indicator"></div>
 </section>
 
-<!-- ==================== MARQUEE 1 ==================== -->
-<div class="marquee">
-  <div class="marquee-track">
-    <span class="marquee-item">send the right signal</span>
-    <span class="marquee-item accent">ninety seconds</span>
-    <span class="marquee-item">every day</span>
-    <span class="marquee-item accent">no water</span>
-    <span class="marquee-item">tastes like candy</span>
-    <span class="marquee-item accent">works like biology</span>
-    <span class="marquee-item">send the right signal</span>
-    <span class="marquee-item accent">ninety seconds</span>
-    <span class="marquee-item">every day</span>
-    <span class="marquee-item accent">no water</span>
-    <span class="marquee-item">tastes like candy</span>
-    <span class="marquee-item accent">works like biology</span>
-  </div>
-</div>
+<!-- ==================== QUOTE (replaces scrolling marquee) ==================== -->
+<section class="quote-band">
+  <blockquote class="szent-quote">&ldquo;treating humans without the concept of energy is treating dead matter.&rdquo;</blockquote>
+  <div class="szent-attribution">&mdash; Albert Szent-Gy&ouml;rgyi &nbsp;&middot;&nbsp; Nobel laureate, physiology &amp; medicine 1937</div>
+</section>
 
 <!-- ==================== 2 • SENSATION ==================== -->
 <section class="sensation">
