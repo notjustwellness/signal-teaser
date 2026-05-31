@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>signal — the signal your cells are waiting for</title>
+<meta name="description" content="signal is the daily foundation — daily packets engineered to support the cells that run every system in your body. The layer beneath every supplement. Join the waitlist.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'Anguita Sans'; src: url('fonts/AnguitaSans.otf') format('opentype'); font-weight: 900; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Bebas Neue'; src: url('fonts/BebasNeue-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+
+  :root {
+    --signal: #AD4236;
+    --signal-light: #c4574b;
+    --rose-linen: #F6EFEA;
+    --deep-evening: #4A2540;
+    --deep-evening-soft: #5A3550;
+    --font-display: 'Anguita Sans', 'Bebas Neue', Impact, sans-serif;
+    --font-editorial: 'Bebas Neue', 'Anguita Sans', Impact, sans-serif;
+    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font-body); background: var(--deep-evening); color: var(--rose-linen); line-height: 1.6; -webkit-font-smoothing: antialiased; font-weight: 400; }
+
+  /* ---- HERO ---- */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  /* The "signal" projection — spotlight cast against the night sky.
+     A single radial gradient doing the work of a bat-signal without being one. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 760px;
+    height: 760px;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+      rgba(173,66,54,0.38) 0%,
+      rgba(173,66,54,0.22) 22%,
+      rgba(173,66,54,0.08) 45%,
+      rgba(173,66,54,0.02) 65%,
+      transparent 78%);
+    pointer-events: none;
+  }
+  /* A soft outer halo — where the projection fades into the night. */
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    border: 1px solid rgba(173,66,54,0.09);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero-overline {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-overline img { height: 13px; opacity: 0.85; }
+  .hero-overline span {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--signal);
+    font-weight: 600;
+  }
+
+  /* Waitlist badge — makes the page's purpose unmistakable at a glance */
+  .waitlist-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--signal-light);
+    font-weight: 700;
+    margin-bottom: 32px;
+    padding: 8px 18px;
+    border: 1px solid rgba(173,66,54,0.4);
+    border-radius: 24px;
+    background: rgba(173,66,54,0.1);
+    position: relative;
+    z-index: 1;
+  }
+  .badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--signal);
+    display: inline-block;
+    box-shadow: 0 0 12px rgba(173,66,54,0.8);
+    animation: badge-pulse 2s ease-in-out infinite;
+  }
+  @keyframes badge-pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 18px rgba(173,66,54,1); }
+  }
+
+  /* Founder's Price preview — value prop right above the form */
+  .founders-preview {
+    margin: 0 auto 32px;
+    padding: 18px 28px;
+    border: 1px solid rgba(173,66,54,0.3);
+    border-radius: 12px;
+    background: rgba(173,66,54,0.06);
+    max-width: 460px;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+  .founders-preview-overline {
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--signal-light);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .founders-preview p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--rose-linen);
+    opacity: 0.95;
+    line-height: 1.5;
+  }
+  .founders-preview .price {
+    font-family: var(--font-display);
+    color: var(--signal-light);
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+  }
+  .hero-wordmark {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 100px;
+    color: var(--signal);
+    line-height: 0.9;
+    letter-spacing: -3px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 16px;
+  }
+  .hero-wordmark .ipa-accent { color: var(--rose-linen); }
+  .hero-pitch {
+    font-family: var(--font-body);
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: var(--rose-linen);
+    opacity: 0.85;
+    text-transform: lowercase;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-body {
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.7;
+    max-width: 580px;
+    opacity: 0.8;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+    font-weight: 400;
+  }
+
+  /* ---- EMAIL FORM ---- */
+  .email-form {
+    display: flex;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 16px;
+  }
+  .email-form input[type="email"] {
+    background: rgba(246,239,234,0.08);
+    border: 1px solid rgba(246,239,234,0.2);
+    border-radius: 6px;
+    color: var(--rose-linen);
+    padding: 16px 20px;
+    font-size: 15px;
+    font-family: var(--font-body);
+    width: 300px;
+    letter-spacing: 0.5px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .email-form input[type="email"]:focus { border-color: var(--signal); }
+  .email-form input[type="email"]::placeholder { color: rgba(246,239,234,0.35); }
+  .email-form button {
+    background: var(--signal);
+    color: var(--rose-linen);
+    border: none;
+    border-radius: 6px;
+    padding: 16px 28px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .email-form button:hover { background: var(--signal-light); }
+  .form-note {
+    font-size: 12px;
+    opacity: 0.4;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 48px;
+  }
+  .form-success {
+    display: none;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .form-success h3 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 900;
+    text-transform: lowercase;
+    color: var(--signal);
+    margin-bottom: 8px;
+  }
+  .form-success p {
+    font-size: 15px;
+    opacity: 0.7;
+  }
+
+  /* Packet image — floats free across the entire viewport, follows cursor with easing.
+     position: fixed so it stays with the viewport on scroll and can travel the whole page.
+     pointer-events: none so it never blocks clicks anywhere. */
+  .hero-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 150px;
+    max-width: 150px;
+    pointer-events: none;
+    filter: drop-shadow(0 12px 36px rgba(0,0,0,0.5));
+    transform: translate(-50%, -50%) translate3d(0, 0, 0);
+    will-change: transform;
+    opacity: 1;
+  }
+  /* Front ↔ back crossfade — 7s cycle, both stacked at the same cursor-tracked position */
+  .hero-image--face { animation: 7s ease-in-out infinite; }
+  .hero-image--front { animation-name: signalPacketFlipFront; }
+  .hero-image--back  { animation-name: signalPacketFlipBack; }
+  @keyframes signalPacketFlipFront {
+    0%, 42%  { opacity: 1; }
+    50%, 92% { opacity: 0; }
+    100%     { opacity: 1; }
+  }
+  @keyframes signalPacketFlipBack {
+    0%, 42%  { opacity: 0; }
+    50%, 92% { opacity: 1; }
+    100%     { opacity: 0; }
+  }
+
+  /* ---- PROOF / WHAT'S INSIDE ---- */
+  .credibility {
+    background: var(--rose-linen);
+    color: var(--deep-evening);
+    padding: 80px 10%;
+  }
+  .credibility-overline {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--signal);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .credibility h2 {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    text-transform: lowercase;
+    margin-bottom: 40px;
+    color: var(--deep-evening);
+  }
+  .credibility h2 .highlight { color: var(--signal); }
+
+  /* Skin-first hero card — polished chrome mirror.
+     Layered: diagonal glass sheen, soft vignette, and the chrome banding itself
+     (bright top → dark horizon band → bright bottom). The signal-red spotlight
+     pulse becomes a warm light reflecting on the polished surface. */
+  .skin-hero {
+    position: relative;
+    background:
+      /* Subtle diagonal polish streak — present but not competing with the reflection */
+      linear-gradient(128deg,
+        rgba(255,255,255,0.14) 0%,
+        transparent 22%,
+        rgba(255,255,255,0.08) 50%,
+        transparent 75%,
+        rgba(255,255,255,0.03) 100%),
+      /* Soft vignette — corners fall off like a real mirror edge */
+      radial-gradient(ellipse at center,
+        transparent 42%,
+        rgba(26,20,16,0.28) 100%),
+      /* Chrome banding — polished warm metal reflecting a dim room.
+         Bright top (ceiling) → wide dark horizon band (walls) → bright bottom (floor).
+         The dark band is widened (40-60%) so centered text reads against the dark zone. */
+      linear-gradient(180deg,
+        #F6EFEA 0%,
+        #E3D5C8 8%,
+        #A89384 20%,
+        #5A4A3E 34%,
+        #2E241E 42%,
+        #1F1812 50%,
+        #2E241E 58%,
+        #5A4A3E 66%,
+        #A89384 80%,
+        #E3D5C8 92%,
+        #F6EFEA 100%);
+    color: var(--rose-linen);
+    border-radius: 16px;
+    padding: 96px 48px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow:
+      /* Outer lift */
+      0 16px 56px rgba(26,20,16,0.22),
+      /* Beveled edges — chrome has a defined frame */
+      inset 0 1px 0 rgba(255,255,255,0.35),
+      inset 0 -1px 0 rgba(0,0,0,0.45),
+      inset 1px 0 0 rgba(255,255,255,0.12),
+      inset -1px 0 0 rgba(0,0,0,0.18);
+  }
+  /* Reflection layer — a blurred bathroom-mirror scene sits beneath the chrome gradient.
+     Source: Unsplash photo-1636625632595-98fa44634dbf (Unsplash License) — literal bathroom
+     mirror with a woman's reflection + her long dark hair visible. Cropped to the reflection.
+     TODO before launch: replace with licensed/owned brand asset (ideally a custom shoot). */
+  .skin-hero-reflection {
+    position: absolute;
+    top: -80px;
+    left: -80px;
+    right: -80px;
+    bottom: -80px;
+    background-image: url('signal_reflection.jpg');
+    background-size: 200% auto;
+    background-position: 25% 25%;
+    background-repeat: no-repeat;
+    filter: blur(10px) saturate(1.2) brightness(1.12) contrast(1.1);
+    opacity: 1;
+    mix-blend-mode: normal;
+    /* Radial mask — reflection fully visible in center, fades to let chrome frame show at edges */
+    -webkit-mask-image: radial-gradient(ellipse 72% 78% at 50% 48%, black 55%, transparent 95%);
+    mask-image: radial-gradient(ellipse 72% 78% at 50% 48%, black 55%, transparent 95%);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .skin-hero-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 860px;
+    height: 860px;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+      rgba(173,66,54,0.22) 0%,
+      rgba(173,66,54,0.12) 28%,
+      rgba(173,66,54,0.04) 50%,
+      rgba(173,66,54,0.01) 65%,
+      transparent 78%);
+    pointer-events: none;
+    animation: skin-pulse 6s ease-in-out infinite;
+    z-index: 2;
+    mix-blend-mode: screen;
+  }
+  .skin-hero-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 560px;
+    height: 560px;
+    border-radius: 50%;
+    border: 1px solid rgba(173,66,54,0.12);
+    pointer-events: none;
+    z-index: 2;
+  }
+  @keyframes skin-pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+    50% { transform: translate(-50%, -50%) scale(1.06); opacity: 1; }
+  }
+  .skin-hero-content {
+    position: relative;
+    z-index: 3;
+    max-width: 720px;
+  }
+  .skin-hero-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--signal-light);
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .skin-hero-quote {
+    font-family: var(--font-display);
+    font-size: 80px;
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -2px;
+    text-transform: lowercase;
+    color: var(--rose-linen);
+    margin-bottom: 28px;
+  }
+  .skin-hero-body {
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.7;
+    opacity: 0.72;
+    max-width: 560px;
+    margin: 0 auto;
+    font-weight: 400;
+  }
+
+  /* Supporting cards (Clinical + Format) — smaller, subordinate */
+  .support-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 2px 20px rgba(26,20,16,0.06);
+  }
+  .card-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .card h4 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+    text-transform: lowercase;
+    line-height: 1.1;
+    color: var(--deep-evening);
+  }
+  .card p {
+    font-size: 15px;
+    line-height: 1.6;
+    opacity: 0.75;
+    font-weight: 400;
+    color: var(--deep-evening);
+  }
+
+  /* ---- FOUNDER'S PRICE ---- */
+  .founders {
+    background: var(--deep-evening);
+    color: var(--rose-linen);
+    padding: 80px 10%;
+    text-align: center;
+  }
+  .founders-label {
+    font-family: var(--font-editorial);
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 24px;
+  }
+  .founders h2 {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 900;
+    text-transform: lowercase;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+  .founders h2 .price { color: var(--signal); }
+  .founders .detail {
+    font-size: 17px;
+    opacity: 0.7;
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+  .founders .cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--signal-light);
+    text-decoration: none;
+    border-bottom: 1px solid var(--signal);
+    padding-bottom: 4px;
+    text-transform: lowercase;
+    font-weight: 900;
+    transition: color 0.2s;
+  }
+  .founders .cta-link:hover { color: var(--signal); }
+  .founders .estimate {
+    margin-top: 24px;
+    font-size: 12px;
+    opacity: 0.35;
+    letter-spacing: 1px;
+  }
+
+  /* ---- FOOTER ---- */
+  .site-footer {
+    background: var(--deep-evening);
+    border-top: 1px solid rgba(246,239,234,0.06);
+    padding: 40px 10%;
+    text-align: center;
+  }
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .footer-brand img { height: 12px; opacity: 0.5; }
+  .footer-brand span {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.4;
+    font-weight: 500;
+  }
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .footer-links a {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--rose-linen);
+    opacity: 0.3;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+  .footer-links a:hover { opacity: 0.6; }
+  .footer-fda {
+    font-size: 11px;
+    opacity: 0.25;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 768px) {
+    .hero { padding: 48px 24px; }
+    .hero-wordmark { font-size: 64px; letter-spacing: -2px; }
+    .hero-pitch { font-size: 16px; }
+    .hero-body { font-size: 15px; }
+    .email-form { flex-direction: column; width: 100%; max-width: 340px; }
+    .email-form input[type="email"] { width: 100%; }
+    .email-form button { width: 100%; padding: 16px; }
+    .hero-image { position: relative; transform: none; width: 140px; max-width: 140px; margin: 32px auto 0; opacity: 1; }
+    .credibility { padding: 60px 24px; }
+    .credibility h2 { font-size: 32px; }
+    .skin-hero { padding: 64px 24px; min-height: 340px; }
+    .skin-hero-quote { font-size: 44px; letter-spacing: -1px; }
+    .skin-hero-pulse { width: 620px; height: 620px; }
+    .skin-hero-ring { width: 380px; height: 380px; }
+    .support-grid { grid-template-columns: 1fr; }
+    .founders { padding: 60px 24px; }
+    .founders h2 { font-size: 32px; }
+    .site-footer { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="top">
+  <div class="hero-overline">
+    <img src="logo/insdr_logo_light.png" alt="INSDR">
+    <span>Wellness</span>
+  </div>
+  <div class="waitlist-badge">
+    <span class="badge-dot"></span>
+    Waitlist open &middot; Launching Q4 2026
+  </div>
+  <div class="hero-wordmark" aria-label="signal"><span class="ipa-accent">/</span>s&#x026A;&#x0261;<span class="ipa-accent">&#x02C8;</span>n&#x0251;<span class="ipa-accent">&#x02D0;</span>l<span class="ipa-accent">/</span></div>
+  <div class="hero-pitch">the signal your cells are waiting for.</div>
+  <div class="hero-pitch" style="font-size: 0.7em; opacity: 0.85; margin-top: 8px; font-style: italic;">the daily foundation you actually look forward to taking.</div>
+  <p class="hero-body">Your cells run on Mg-ATP &mdash; the energy currency every system in your body depends on. Most supplements ask the cells to do work. signal gives the cells the substrates to do the work. A daily packet. The layer beneath every supplement you already take.</p>
+
+  <div class="founders-preview">
+    <div class="founders-preview-overline">Founder&rsquo;s Price &middot; First 500 only</div>
+    <p><span class="price">$49</span> for your first two months. Then $69.</p>
+  </div>
+
+  <!--
+    EMAIL CAPTURE — SETUP INSTRUCTIONS
+    ===================================
+    1. Create a free ConvertKit account at kit.com
+    2. Create a new Form (landing page type or inline)
+    3. In Form settings, find the "HTML" embed option
+    4. Copy the form action URL (looks like: https://app.convertkit.com/forms/XXXXXXX/subscriptions)
+    5. Replace CONVERTKIT_FORM_URL_HERE below with that URL
+    6. The input name "email_address" is ConvertKit's default field name
+    7. ConvertKit will handle the redirect to a success page after submission
+
+    For inline success (no redirect), use ConvertKit's JavaScript embed instead:
+    - Replace this entire <form> with the <script> tag ConvertKit provides
+    - Style it with the CSS above to match the brand
+  -->
+  <div id="signup-form">
+    <form class="email-form" action="CONVERTKIT_FORM_URL_HERE" method="post">
+      <input type="email" name="email_address" placeholder="you@example.com" required aria-label="Email address">
+      <button type="submit">send a signal</button>
+    </form>
+    <div class="form-note">join the waitlist &middot; no spam &middot; one email when we launch.</div>
+  </div>
+
+  <img src="signal_packet_float_front.png" alt="signal packet front" class="hero-image hero-image--face hero-image--front" id="floatingPacketFront">
+  <img src="signal_packet_float_back.png" alt="signal packet back" class="hero-image hero-image--face hero-image--back" id="floatingPacketBack">
+</section>
+
+<!-- ==================== WHAT'S INSIDE ==================== -->
+<section class="credibility">
+  <div class="credibility-overline">The proof</div>
+  <h2>the layer <span class="highlight">beneath every supplement.</span></h2>
+
+  <!-- Hero card: chrome visual retained; copy shifted from skin-outcome to mechanism + product drop. -->
+  <div class="skin-hero">
+    <div class="skin-hero-reflection"></div>
+    <div class="skin-hero-pulse"></div>
+    <div class="skin-hero-ring"></div>
+    <div class="skin-hero-content">
+      <div class="skin-hero-label">First drop &mdash; signal N&deg;001 &middot; Q4 2026</div>
+      <div class="skin-hero-quote">the chew is the receipt.</div>
+      <p class="skin-hero-body">Proof-of-work, not proof-of-outcome. Signal is a daily practice; the chew is how you know you did it. Your cells do the rest.</p>
+    </div>
+  </div>
+
+  <!-- Supporting cards: what delivers the proof -->
+  <div class="support-grid">
+    <div class="card">
+      <div class="card-label">Clinical doses</div>
+      <h4>every number on the packet.</h4>
+      <p>No proprietary blends. No hiding. When we launch, every ingredient at every dose is printed where you can see it.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">The format</div>
+      <h4>not a capsule.</h4>
+      <p>Not a powder. Not a shaker. A daily packet of chews — two chews (substrate + keystone) in signal N&deg;001 (the foundation, the multi-system daily core), two pearl chews in N&deg;002 (the daily fuel, 5-active ATP layer). The kind of ritual people actually keep.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">On the go</div>
+      <h4>the travel container.</h4>
+      <p>A universal MagSafe carry pod with a tactile push button to open. Holds one SKU's monthly supply — signal, or whatever else stacks alongside it. Limited edition.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOUNDER'S PRICE ==================== -->
+<section class="founders">
+  <div class="founders-label">Founder&rsquo;s Price</div>
+  <h2><span class="price">$49</span> for your first two months.</h2>
+  <p class="detail">First 500 subscribers only. Then it&rsquo;s $69.</p>
+  <a href="#top" class="cta-link">send a signal &rarr;</a>
+  <div class="estimate">directional estimate &mdash; final pricing confirmed at launch</div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="site-footer">
+  <div class="footer-brand">
+    <img src="logo/insdr_logo_light.png" alt="INSDR">
+    <span>Wellness &middot; 2026 &middot; the cellcare company</span>
+  </div>
+  <div class="footer-links">
+    <a href="#">Instagram</a>
+    <a href="#">TikTok</a>
+    <a href="#">Contact</a>
+  </div>
+  <p class="footer-fda">These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease. Launching Q4 2026.</p>
+</footer>
+
+<script>
+  /* Packet follows the cursor across the ENTIRE viewport with eased lerp motion.
+     position: fixed on the image + document-level mousemove listener.
+     Disabled on touch/mobile. */
+  (function() {
+    if (window.matchMedia('(max-width: 768px)').matches) return;
+    if (window.matchMedia('(hover: none)').matches) return;
+
+    const packets = document.querySelectorAll('#floatingPacketFront, #floatingPacketBack');
+    if (!packets.length) return;
+
+    let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+    let rafId = null;
+
+    const applyTransform = () => {
+      packets.forEach(p => { p.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%, -50%)`; });
+    };
+
+    const setDefault = () => {
+      targetX = window.innerWidth * 0.82;
+      targetY = window.innerHeight * 0.78;
+      currentX = targetX;
+      currentY = targetY;
+      applyTransform();
+    };
+
+    setDefault();
+
+    document.addEventListener('mousemove', (e) => {
+      // Offset below-right of cursor so the cursor itself stays visible
+      targetX = e.clientX + 70;
+      targetY = e.clientY + 60;
+      if (!rafId) animate();
+    });
+
+    const animate = () => {
+      currentX += (targetX - currentX) * 0.09;
+      currentY += (targetY - currentY) * 0.09;
+      applyTransform();
+
+      if (Math.abs(targetX - currentX) > 0.3 || Math.abs(targetY - currentY) > 0.3) {
+        rafId = requestAnimationFrame(animate);
+      } else {
+        rafId = null;
+      }
+    };
+
+    window.addEventListener('resize', setDefault);
+  })();
+</script>
+</body>
+</html>

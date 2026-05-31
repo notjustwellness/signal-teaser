@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>signal — an invitation</title>
+<meta name="description" content="send the right signal.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* --- PASSWORD GATE --- */
+  #gate { position: fixed; inset: 0; background: #4A2540; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; color: #F6EFEA; cursor: auto; }
+  #gate::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(173,66,54,0.18) 0%, transparent 70%); pointer-events: none; animation: gate-breathe 4s ease-in-out infinite; }
+  @keyframes gate-breathe { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; } 50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; } }
+  #gate .gate-overline { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #AD4236; margin-bottom: 20px; font-weight: 600; position: relative; }
+  #gate .gate-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 72px; color: #AD4236; line-height: 1; margin-bottom: 16px; letter-spacing: -2px; position: relative; }
+  #gate .gate-title .accent { color: #F6EFEA; font-weight: 400; }
+  #gate .gate-subtitle { font-size: 13px; opacity: 0.55; margin-bottom: 32px; letter-spacing: 1.5px; position: relative; text-transform: lowercase; }
+  #gate form { display: flex; flex-direction: column; align-items: center; gap: 12px; position: relative; }
+  #gate input { background: rgba(246,239,234,0.06); border: 1px solid rgba(246,239,234,0.2); border-radius: 6px; color: #F6EFEA; padding: 14px 20px; font-size: 15px; font-family: inherit; width: 280px; text-align: center; letter-spacing: 1px; outline: none; transition: border-color 0.2s; }
+  #gate input:focus { border-color: #AD4236; }
+  #gate button { background: #AD4236; color: #F6EFEA; border: none; border-radius: 6px; padding: 13px 36px; font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+  #gate button:hover { background: #c4574b; }
+  #gate .gate-error { color: #AD4236; font-size: 12px; margin-top: 6px; opacity: 0; transition: opacity 0.2s; letter-spacing: 1px; height: 14px; }
+  #gate .gate-error.show { opacity: 1; }
+  #gate .gate-footer { position: absolute; bottom: 40px; font-size: 10px; opacity: 0.3; letter-spacing: 3px; text-transform: uppercase; }
+  body.locked { overflow: hidden; cursor: auto !important; }
+  body.locked > section, body.locked > .marquee, body.locked > .sku-marquee, body.locked .floating-packet { display: none !important; }
+  /* Floating packet — follows cursor across entire viewport (mirrors v5 deck) */
+  .floating-packet {
+    position: fixed; top: 0; left: 0; z-index: 100;
+    width: 120px; max-width: 120px; pointer-events: none;
+    filter: drop-shadow(0 12px 36px rgba(0,0,0,0.5));
+    transform: translate(-50%, -50%) translate3d(0, 0, 0);
+    will-change: transform; opacity: 1;
+  }
+  @media (max-width: 768px), (hover: none) { .floating-packet { display: none; } }
+  /* Front ↔ back crossfade — 7s cycle, both stacked at the same cursor-tracked position */
+  .floating-packet--face { animation: 7s ease-in-out infinite; }
+  .floating-packet--front { animation-name: signalPacketFlipFront; }
+  .floating-packet--back  { animation-name: signalPacketFlipBack; }
+  @keyframes signalPacketFlipFront {
+    0%, 42%  { opacity: 1; }
+    50%, 92% { opacity: 0; }
+    100%     { opacity: 1; }
+  }
+  @keyframes signalPacketFlipBack {
+    0%, 42%  { opacity: 0; }
+    50%, 92% { opacity: 1; }
+    100%     { opacity: 0; }
+  }
+  @media (max-width: 768px) { #gate .gate-title { font-size: 48px; } #gate input { width: 240px; } }
+</style>
+<style>
+  /* --- SELF-HOSTED BRAND FONTS --- */
+  @font-face { font-family: 'Anguita Sans'; src: url('fonts/AnguitaSans.otf') format('opentype'); font-weight: 900; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Bebas Neue'; src: url('fonts/BebasNeue-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+
+  :root {
+    --signal: #AD4236;
+    --signal-light: #c4574b;
+    --signal-deep: #7a2e25;
+    --rose-linen: #F6EFEA;
+    --deep-evening: #4A2540;
+    --deep-evening-soft: #5A3550;
+    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    --font-display: 'Anguita Sans', 'Bebas Neue', Impact, sans-serif;
+    --font-condensed: 'Bebas Neue', 'Anguita Sans', Impact, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: var(--deep-evening);
+    color: var(--rose-linen);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 400;
+    overflow-x: hidden;
+  }
+
+  /* Film grain removed — animation budget reduced for Gen Z clarity over decoration. */
+
+  section { position: relative; padding: 100px 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; z-index: 1; }
+
+  /* Fade-in on scroll */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 900ms ease, transform 900ms ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal.delay-1 { transition-delay: 150ms; }
+  .reveal.delay-2 { transition-delay: 300ms; }
+  .reveal.delay-3 { transition-delay: 450ms; }
+
+  /* ==================== SECTION 1 — THE ARRIVAL ==================== */
+  .arrival { min-height: 100vh; padding: 60px 40px; overflow: hidden; }
+  .arrival::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(173,66,54,0.22) 0%, rgba(173,66,54,0.08) 40%, transparent 70%);
+    pointer-events: none;
+    animation: breathe 4s ease-in-out infinite;
+  }
+  .arrival::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(173,66,54,0.35) 0%, transparent 70%);
+    pointer-events: none;
+    animation: breathe 4s ease-in-out infinite reverse;
+  }
+  @keyframes breathe {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+    50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+  }
+
+  /* Entrainment wordmark — two ghost layers converge to unison, synced to two-frequencies-syncing audio */
+  .wordmark-container { position: relative; display: inline-block; line-height: 1; z-index: 2; }
+  .wordmark-ghost { margin: 0; will-change: transform, opacity; transition: transform 0.2s linear, opacity 0.2s linear; opacity: 0.5; transform: translateX(-7px); }
+  .wordmark-ghost.ghost-right { position: absolute; top: 0; left: 0; right: 0; transform: translateX(7px); }
+  @media (prefers-reduced-motion: reduce) { .wordmark-ghost { transform: translateX(0) !important; transition: none !important; } }
+  @media print { .wordmark-ghost.ghost-left { display: none !important; } .wordmark-ghost.ghost-right { position: static !important; opacity: 1 !important; transform: none !important; } }
+
+  .arrival-content { position: relative; z-index: 2; }
+  .company-overline {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(246,239,234,0.75);
+    opacity: 0;
+    margin-bottom: 32px;
+    font-weight: 500;
+    animation: fadeIn 800ms ease 200ms forwards;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .company-overline .insdr-logo {
+    height: 13px;
+    width: auto;
+    opacity: 0.85;
+    display: inline-block;
+  }
+  .wordmark {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 112px;
+    letter-spacing: -3px;
+    line-height: 1;
+    color: var(--signal);
+    margin-bottom: 32px;
+    text-shadow: 0 0 60px rgba(173,66,54,0.3);
+  }
+  .wordmark .accent { color: var(--rose-linen); font-weight: 400; }
+  .wordmark .char { display: inline-block; opacity: 0; transform: translateY(8px); animation: charIn 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .wordmark .char:nth-child(1) { animation-delay: 400ms; }
+  .wordmark .char:nth-child(2) { animation-delay: 520ms; }
+  .wordmark .char:nth-child(3) { animation-delay: 640ms; }
+  .wordmark .char:nth-child(4) { animation-delay: 760ms; }
+  .wordmark .char:nth-child(5) { animation-delay: 880ms; }
+  .wordmark .char:nth-child(6) { animation-delay: 1000ms; }
+  .wordmark .char:nth-child(7) { animation-delay: 1120ms; }
+  .wordmark .char:nth-child(8) { animation-delay: 1240ms; }
+  .wordmark .char:nth-child(9) { animation-delay: 1360ms; }
+  @keyframes charIn { to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { to { opacity: 0.7; } }
+
+  .wordmark-small {
+    font-size: 32px;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+    text-shadow: none;
+  }
+  .wordmark-small .char { opacity: 1; transform: none; animation: none; }
+
+  .arrival-tagline {
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--rose-linen);
+    opacity: 0;
+    font-weight: 300;
+    text-transform: lowercase;
+    margin-bottom: 20px;
+    animation: fadeInTagline 800ms ease 400ms forwards;
+  }
+  @keyframes fadeInTagline { to { opacity: 0.75; } }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 60px;
+    background: var(--rose-linen);
+    opacity: 0;
+    animation: pulseLine 2s ease-in-out 2000ms infinite;
+  }
+  @keyframes pulseLine {
+    0%, 100% { opacity: 0.15; height: 50px; }
+    50% { opacity: 0.5; height: 70px; }
+  }
+
+  /* ==================== QUOTE BAND — single-line scrolling ==================== */
+  .quote-band {
+    overflow: hidden;
+    background: var(--deep-evening);
+    border-top: 1px solid rgba(246,239,234,0.08);
+    border-bottom: 1px solid rgba(246,239,234,0.08);
+    padding: 44px 0;
+    position: relative;
+  }
+  .quote-band .marquee-track {
+    display: flex;
+    gap: 80px;
+    white-space: nowrap;
+    animation: marquee 18s linear infinite;
+    width: max-content;
+    align-items: baseline;
+  }
+  .quote-band .quote-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 32px;
+    flex-shrink: 0;
+  }
+  .quote-band .szent-quote {
+    font-family: var(--font-display);
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: rgba(246,239,234,0.95);
+    text-transform: lowercase;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .quote-band .szent-attribution {
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--signal);
+    opacity: 0.85;
+    font-weight: 600;
+    white-space: nowrap;
+    position: relative;
+    top: -6px;
+  }
+  .quote-band .quote-divider {
+    color: var(--signal);
+    font-size: 32px;
+    opacity: 0.5;
+    line-height: 1;
+    align-self: center;
+  }
+  @media (max-width: 768px) {
+    .quote-band { padding: 28px 0; }
+    .quote-band .szent-quote { font-size: 22px; letter-spacing: -0.5px; }
+    .quote-band .szent-attribution { font-size: 9px; letter-spacing: 2px; top: -3px; }
+    .quote-band .marquee-track { gap: 48px; animation-duration: 14s; }
+    .quote-band .quote-item { gap: 20px; }
+  }
+
+  /* ==================== MARQUEE TICKER ==================== */
+  .marquee {
+    overflow: hidden;
+    border-top: 1px solid rgba(246,239,234,0.1);
+    border-bottom: 1px solid rgba(246,239,234,0.1);
+    padding: 32px 0;
+    position: relative;
+    background: var(--deep-evening);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 72px;
+    white-space: nowrap;
+    animation: marquee 70s linear infinite;
+    width: max-content;
+  }
+  .marquee-item {
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: -0.3px;
+    text-transform: lowercase;
+    color: var(--rose-linen);
+    display: inline-flex;
+    align-items: center;
+    gap: 72px;
+    opacity: 0.92;
+  }
+  .marquee-item::after {
+    content: '—';
+    color: var(--signal);
+    font-size: 32px;
+    margin-left: 72px;
+    opacity: 0.7;
+  }
+  .marquee-item.accent {
+    font-family: var(--font-condensed);
+    font-weight: 400;
+    font-size: 44px;
+    color: var(--signal);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .marquee-red {
+    background: linear-gradient(90deg, var(--signal) 0%, #c4574b 50%, var(--signal) 100%);
+    border-top: 1px solid rgba(26,20,16,0.15);
+    border-bottom: 1px solid rgba(26,20,16,0.15);
+  }
+  .marquee-red .marquee-item { color: var(--rose-linen); opacity: 1; }
+  .marquee-red .marquee-item::after { color: rgba(246,239,234,0.5); content: '/'; font-weight: 300; }
+  .marquee-red .marquee-item.accent { color: var(--deep-evening); }
+  .marquee-red .marquee-track { animation-direction: reverse; animation-duration: 80s; }
+
+  /* ==================== SKU MARQUEE (replaces red text marquee) ==================== */
+  .sku-marquee {
+    overflow: hidden;
+    background: var(--deep-evening);
+    border-top: 1px solid rgba(246,239,234,0.08);
+    border-bottom: 1px solid rgba(246,239,234,0.08);
+    padding: 56px 0;
+    position: relative;
+  }
+  .sku-marquee .marquee-track {
+    display: flex;
+    gap: 24px;
+    white-space: nowrap;
+    animation: marquee 90s linear infinite;
+    width: max-content;
+    align-items: center;
+  }
+  .sku-card {
+    flex-shrink: 0;
+    width: 300px;
+    height: 380px;
+    border-radius: 10px;
+    position: relative;
+    background: linear-gradient(155deg, #3A1D33 0%, #4A2540 100%);
+    border: 1px solid rgba(173,66,54,0.22);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 28px;
+    overflow: hidden;
+    transition: border-color 0.5s ease, transform 0.5s ease;
+  }
+  .sku-card::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(173,66,54,0.18) 0%, transparent 65%);
+    pointer-events: none;
+    transition: background 0.6s ease, opacity 0.6s ease;
+    z-index: 0;
+  }
+  .sku-card:hover {
+    border-color: rgba(173,66,54,0.6);
+    transform: translateY(-4px);
+  }
+  /* On hover, the subtle red glow fades to let the full mood backdrop take over */
+  .sku-card:hover::before { opacity: 0; }
+
+  /* Mood backdrop — fades in + scales up on hover. Acts as the 'image coming forward'. */
+  .sku-mood {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.08);
+    transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.3, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1);
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .sku-mood img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .sku-card:hover .sku-mood { opacity: 1; transform: scale(1); }
+  /* Darkening overlay so text stays readable when mood is active */
+  .sku-mood::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(26,20,16,0.55) 0%, rgba(26,20,16,0.82) 100%);
+    pointer-events: none;
+  }
+  .sku-card .sku-order {
+    position: absolute;
+    top: 20px; left: 24px;
+    font-family: var(--font-condensed);
+    font-size: 18px;
+    color: var(--signal);
+    opacity: 0.6;
+    letter-spacing: 2px;
+    line-height: 1;
+    z-index: 1;
+  }
+  .sku-card:hover .sku-order { color: var(--rose-linen); opacity: 0.9; }
+  .sku-card .sku-status {
+    position: absolute;
+    top: 22px; right: 24px;
+    font-family: var(--font-body);
+    font-size: 9px;
+    color: var(--rose-linen);
+    opacity: 0.35;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    z-index: 1;
+  }
+  .sku-card:hover .sku-status { opacity: 0.7; }
+  .sku-card .sku-wordmark {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: var(--signal);
+    position: relative;
+    z-index: 1;
+    margin-bottom: 6px;
+  }
+  .sku-card .sku-wordmark .accent { color: var(--rose-linen); font-weight: 400; }
+  .sku-card .sku-separator {
+    width: 32px;
+    height: 1px;
+    background: var(--signal);
+    opacity: 0.5;
+    margin: 16px 0;
+    position: relative;
+    z-index: 1;
+  }
+  .sku-card .sku-name {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 56px;
+    color: var(--rose-linen);
+    text-transform: lowercase;
+    letter-spacing: -2px;
+    line-height: 0.95;
+    position: relative;
+    z-index: 1;
+  }
+  .sku-card .sku-promise {
+    position: absolute;
+    bottom: 28px; left: 28px; right: 28px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: var(--rose-linen);
+    opacity: 0.55;
+    letter-spacing: 0.5px;
+    text-transform: lowercase;
+    text-align: center;
+    line-height: 1.4;
+    z-index: 1;
+  }
+  @media (max-width: 768px) {
+    .sku-card { width: 220px; height: 300px; padding: 32px 20px; }
+    .sku-card .sku-name { font-size: 40px; letter-spacing: -1.5px; }
+    .sku-card .sku-wordmark { font-size: 24px; }
+    .sku-marquee { padding: 32px 0; }
+  }
+
+  /* ==================== SECTION 2 — SENSATION (condensed) ==================== */
+  .sensation { min-height: 60vh; padding: 100px 40px; position: relative; }
+  .sensation::before {
+    content: '';
+    position: absolute;
+    top: 30%;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(173,66,54,0.12) 0%, transparent 70%);
+    filter: blur(20px);
+    pointer-events: none;
+    animation: drift1 25s ease-in-out infinite;
+  }
+  .sensation .line-1 {
+    font-family: var(--font-display);
+    font-size: 72px;
+    font-weight: 900;
+    color: var(--rose-linen);
+    text-transform: lowercase;
+    max-width: 860px;
+    line-height: 1.0;
+    margin-bottom: 64px;
+    position: relative;
+    z-index: 2;
+    letter-spacing: -2px;
+  }
+  .sensation .line-1 em { color: var(--signal); font-style: normal; }
+  .sensation .line-support {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--rose-linen);
+    opacity: 0.65;
+    text-transform: lowercase;
+    letter-spacing: 0.5px;
+    margin-top: -36px;
+    margin-bottom: 48px;
+    max-width: 640px;
+    line-height: 1.5;
+    position: relative;
+    z-index: 2;
+  }
+  .sensation .line-specs {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rose-linen);
+    opacity: 0.75;
+    position: relative;
+    z-index: 2;
+  }
+  .sensation .line-specs .dot {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--signal);
+    opacity: 0.8;
+  }
+
+  /* ==================== SECTION 3 — PROMISE (BRIGHT) ==================== */
+  .promise {
+    min-height: 70vh;
+    padding: 160px 40px;
+    position: relative;
+    overflow: hidden;
+    background: var(--rose-linen);
+    color: var(--deep-evening);
+  }
+  .promise::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(173,66,54,0.18) 0%, transparent 65%);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: breathe 6s ease-in-out infinite;
+  }
+  .promise::after {
+    content: '';
+    position: absolute;
+    bottom: -120px;
+    left: -80px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(244,160,148,0.25) 0%, transparent 65%);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: breathe 7s ease-in-out 1s infinite reverse;
+  }
+  .promise .category-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 36px;
+    position: relative;
+    z-index: 1;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .promise .sku-badge {
+    font-family: var(--font-condensed);
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--signal);
+    border: 1.5px solid var(--signal);
+    padding: 8px 14px 6px;
+    border-radius: 999px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .promise .equals {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 28px;
+    color: var(--signal);
+    line-height: 1;
+    animation: equals-pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes equals-pulse {
+    0%, 100% { opacity: 0.65; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.08); }
+  }
+  .promise .category-type {
+    font-family: var(--font-body);
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--deep-evening);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .promise .category-rationale {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--deep-evening);
+    opacity: 0.6;
+    text-transform: lowercase;
+    letter-spacing: 0.5px;
+    margin-top: 12px;
+    margin-bottom: 32px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .promise .headline {
+    font-family: var(--font-display);
+    font-size: 96px;
+    font-weight: 900;
+    color: var(--deep-evening);
+    text-transform: lowercase;
+    letter-spacing: -3px;
+    line-height: 0.95;
+    max-width: 900px;
+    margin-bottom: 36px;
+    position: relative;
+    z-index: 1;
+  }
+  .promise .headline .highlight {
+    color: var(--signal);
+  }
+  .promise .body {
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--deep-evening);
+    opacity: 0.7;
+    text-transform: lowercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ==================== SECTION 4 — THREE TRUTHS ==================== */
+  .truths { min-height: 70vh; padding: 120px 40px; }
+  .truths-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1100px;
+    width: 100%;
+  }
+  .truth-card {
+    border: 1px solid rgba(246,239,234,0.12);
+    border-radius: 12px;
+    padding: 36px 28px;
+    text-align: left;
+    background: rgba(246,239,234,0.02);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.4s ease, transform 0.4s ease, background 0.4s ease;
+  }
+  .truth-card::before {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(173,66,54,0.08));
+    transition: top 0.6s ease;
+  }
+  .truth-card:hover {
+    border-color: rgba(173,66,54,0.4);
+    transform: translateY(-4px);
+    background: rgba(173,66,54,0.04);
+  }
+  .truth-card:hover::before { top: 0; }
+  .truth-card .num {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--signal);
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+  .truth-card .statement {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--rose-linen);
+    font-weight: 400;
+    text-transform: lowercase;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ==================== SECTION 5 — TENSION ==================== */
+  .tension { min-height: 50vh; padding: 140px 40px; position: relative; overflow: hidden; }
+  .tension::before {
+    content: '';
+    position: absolute;
+    bottom: -150px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(173,66,54,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: drift3 30s ease-in-out infinite;
+    pointer-events: none;
+  }
+  /* "Not a gummy" — torn-in-half gummy bear */
+  .tension-reject {
+    width: 240px;
+    height: 300px;
+    margin: 0 auto 28px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .torn-half {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  .torn-half img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+  }
+  /* Left half — jagged right edge */
+  .torn-left {
+    clip-path: polygon(
+      0% 0%,
+      52% 0%,
+      46% 7%,
+      54% 16%,
+      44% 28%,
+      53% 38%,
+      45% 50%,
+      52% 60%,
+      46% 72%,
+      54% 82%,
+      48% 92%,
+      50% 100%,
+      0% 100%
+    );
+    transform: translate(-14px, 4px) rotate(-5deg);
+    filter: drop-shadow(6px 2px 10px rgba(0,0,0,0.55));
+  }
+  /* Right half — mirrored jagged left edge */
+  .torn-right {
+    clip-path: polygon(
+      52% 0%,
+      100% 0%,
+      100% 100%,
+      50% 100%,
+      48% 92%,
+      54% 82%,
+      46% 72%,
+      52% 60%,
+      45% 50%,
+      53% 38%,
+      44% 28%,
+      54% 16%,
+      46% 7%
+    );
+    transform: translate(14px, -4px) rotate(5deg);
+    filter: drop-shadow(-6px -2px 10px rgba(0,0,0,0.55));
+  }
+  .tension-reject-caption {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    text-transform: lowercase;
+    color: var(--signal);
+    margin-bottom: 12px;
+    line-height: 1;
+  }
+  .tension-reject-sublabel {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rose-linen);
+    opacity: 0.45;
+    margin-bottom: 48px;
+    font-weight: 600;
+  }
+  @media (max-width: 768px) {
+    .tension-reject { width: 180px; height: 220px; margin-bottom: 20px; }
+    .tension-reject-caption { font-size: 22px; }
+    .torn-left { transform: translate(-10px, 3px) rotate(-5deg); }
+    .torn-right { transform: translate(10px, -3px) rotate(5deg); }
+  }
+
+  .tension .main {
+    font-family: var(--font-display);
+    font-size: 64px;
+    font-weight: 900;
+    color: var(--rose-linen);
+    text-transform: lowercase;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    max-width: 820px;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+  }
+  .tension .main em { color: var(--signal); font-style: normal; }
+  .tension .sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--rose-linen);
+    opacity: 0.55;
+    text-transform: lowercase;
+    line-height: 1.8;
+    max-width: 640px;
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+  }
+  .tension .call {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--signal);
+    text-transform: lowercase;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0.5px;
+  }
+
+  /* Launch timing badge — sits above CTA prompt */
+  .launch-badge {
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rose-linen);
+    background: rgba(26,20,16,0.35);
+    border: 1px solid rgba(246,239,234,0.4);
+    padding: 8px 16px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 28px;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+  }
+  .launch-badge span { opacity: 0.55; font-weight: 400; }
+
+  /* ==================== SECTION 6 — CTA (FULL SIGNAL RED) ==================== */
+  .cta {
+    min-height: 60vh;
+    padding: 140px 40px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--signal) 0%, #c4574b 50%, var(--signal-deep) 100%);
+    color: var(--rose-linen);
+  }
+  .cta::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(246,239,234,0.15) 0%, transparent 70%);
+    animation: breathe 5s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .cta-prompt {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--rose-linen);
+    opacity: 0.85;
+    text-transform: lowercase;
+    margin-bottom: 40px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+  }
+  .cta-button {
+    display: inline-block;
+    background: var(--rose-linen);
+    color: var(--signal);
+    padding: 20px 48px;
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+    font-family: var(--font-body);
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 0 0 rgba(246,239,234,0.5);
+    animation: ctaPulse 2.5s ease-in-out infinite;
+  }
+  @keyframes ctaPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(246,239,234,0.6); }
+    50% { box-shadow: 0 0 0 16px rgba(246,239,234,0); }
+  }
+  .cta-button:hover {
+    background: var(--deep-evening);
+    color: var(--rose-linen);
+    transform: translateY(-2px);
+    animation: none;
+    box-shadow: 0 12px 28px rgba(26,20,16,0.3);
+  }
+  .cta-fine-print {
+    font-size: 11px;
+    color: var(--rose-linen);
+    opacity: 0.65;
+    margin-top: 28px;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+    text-transform: lowercase;
+  }
+
+  /* ==================== SECTION 7 — CLOSE ==================== */
+  .close { padding: 60px 40px 48px; min-height: auto; border-top: 1px solid rgba(246,239,234,0.08); }
+  .close .wordmark { font-size: 28px; letter-spacing: -1px; margin-bottom: 20px; text-shadow: none; }
+  .close .wordmark .char { opacity: 1; transform: none; animation: none; }
+  .close .company-line {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rose-linen);
+    opacity: 0.3;
+    font-weight: 400;
+    margin-bottom: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .close .company-line .insdr-logo {
+    height: 11px;
+    width: auto;
+    opacity: 0.9;
+    display: inline-block;
+  }
+  .close .founder-signal {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--rose-linen);
+    opacity: 0.55;
+    font-weight: 400;
+    margin-bottom: 14px;
+    letter-spacing: 0.3px;
+    text-transform: lowercase;
+  }
+  .close .confidentiality {
+    font-size: 10px;
+    color: var(--rose-linen);
+    opacity: 0.2;
+    text-transform: lowercase;
+    font-weight: 300;
+  }
+
+  /* ==================== MOBILE ==================== */
+  @media (max-width: 768px) {
+    section { padding: 80px 24px; }
+    .arrival { padding: 60px 24px; }
+    .wordmark { font-size: 64px; letter-spacing: -1.5px; }
+    .wordmark-small { font-size: 24px; }
+    .company-overline { font-size: 10px; letter-spacing: 3px; margin-bottom: 24px; }
+    .arrival-tagline { font-size: 15px; letter-spacing: 1.5px; }
+    .sensation .line-1 { font-size: 32px; margin-bottom: 40px; }
+    .sensation .line-specs { font-size: 11px; letter-spacing: 2px; gap: 10px; }
+    .promise { padding: 100px 24px; }
+    .promise .headline { font-size: 44px; letter-spacing: -0.5px; }
+    .promise .body { font-size: 14px; }
+    .truths-grid { grid-template-columns: 1fr; gap: 16px; }
+    .truth-card { padding: 28px 24px; }
+    .tension .main { font-size: 28px; }
+    .tension .sub { font-size: 14px; }
+    .cta { padding: 100px 24px; }
+    .cta-prompt { font-size: 18px; }
+    .cta-button { padding: 16px 32px; font-size: 11px; letter-spacing: 3px; }
+    .arrival::before { width: 320px; height: 320px; }
+    .arrival::after { width: 120px; height: 120px; }
+    .marquee { padding: 20px 0; }
+    .marquee-item { font-size: 20px; gap: 40px; }
+    .marquee-item.accent { font-size: 22px; }
+    .marquee-item::after { margin-left: 40px; font-size: 20px; }
+    .wave { border-width: 1px; }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    .wave, .arrival::before, .arrival::after, .cta::before, .tension::before, .promise::before, .sensation::before { animation: none; }
+    .wave { display: none; }
+  }
+
+  /* ==================== PRINT ==================== */
+  @media print {
+    @page { size: letter; margin: 0.5in; }
+    body { background: var(--deep-evening) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; cursor: auto; }
+    .floating-packet, .shockwaves, .scroll-indicator, .marquee { display: none !important; }
+    section { page-break-inside: avoid; min-height: auto; padding: 40px; }
+    .arrival { page-break-after: always; min-height: 9in; }
+    .cta .cta-button, .cta .cta-prompt, .cta .cta-fine-print { display: none; }
+    .cta::after {
+      content: 'for the full deck, contact INSDR Wellness.';
+      font-size: 14px;
+      color: var(--rose-linen);
+      opacity: 0.7;
+      text-transform: lowercase;
+    }
+    .reveal, .wordmark .char, .company-overline, .arrival-tagline { opacity: 1 !important; transform: none !important; animation: none !important; }
+  }
+
+  /* Sonar-ping mute toggle */
+  #pingMuteBtn { position: fixed; top: 16px; right: 16px; z-index: 150; width: 38px; height: 38px; border-radius: 50%; background: rgba(26,20,16,0.55); border: 1px solid rgba(246,239,234,0.2); color: var(--rose-linen); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: background 0.2s; }
+  #pingMuteBtn:hover { background: rgba(26,20,16,0.85); }
+  #pingMuteBtn svg { opacity: 0.85; }
+  body.locked #pingMuteBtn { display: none !important; }
+  @media print { #pingMuteBtn { display: none !important; } }
+  @media (max-width: 768px), (hover: none) { #pingMuteBtn { top: 12px; right: 12px; width: 34px; height: 34px; } }
+</style>
+</head>
+<body class="locked">
+
+<!-- ==================== PASSWORD GATE ==================== -->
+<div id="gate">
+  <div class="gate-overline">INSDR Wellness &middot; Confidential</div>
+  <div class="gate-title" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
+  <div class="gate-subtitle">an early draft. kept close until launch.<br>password from your invitation.</div>
+  <form onsubmit="return checkPass(event)">
+    <input type="password" id="gate-pass" autocomplete="off" autofocus placeholder="password">
+    <button type="submit">Enter</button>
+    <div class="gate-error" id="gate-error">Incorrect. Try again.</div>
+  </form>
+  <div class="gate-footer">Do not share.</div>
+</div>
+<script>
+  (function() {
+    var PASS = "54321";
+    var gate = document.getElementById("gate");
+    var body = document.body;
+    if (sessionStorage.getItem("signal_teaser_unlocked") === "true") {
+      gate.style.display = "none";
+      body.classList.remove("locked");
+    }
+    window.checkPass = function(e) {
+      e.preventDefault();
+      var input = document.getElementById("gate-pass").value;
+      var err = document.getElementById("gate-error");
+      if (input === PASS) {
+        sessionStorage.setItem("signal_teaser_unlocked", "true");
+        gate.style.display = "none";
+        body.classList.remove("locked");
+      } else {
+        err.classList.add("show");
+        setTimeout(function(){ err.classList.remove("show"); }, 2400);
+      }
+      return false;
+    };
+  })();
+</script>
+
+<img src="signal_packet_float_front.png" alt="" class="floating-packet floating-packet--face floating-packet--front" id="floatingPacketFront" aria-hidden="true">
+<img src="signal_packet_float_back.png" alt="" class="floating-packet floating-packet--face floating-packet--back" id="floatingPacketBack" aria-hidden="true">
+
+<!-- ==================== 1 • ARRIVAL ==================== -->
+<section class="arrival">
+  <div class="arrival-content">
+    <div class="company-overline"><img src="logo/insdr_logo_light.png" alt="INSDR" class="insdr-logo"> WELLNESS</div>
+    <div class="arrival-tagline">send the right</div>
+    <div class="wordmark-container">
+      <div class="wordmark wordmark-ghost ghost-left" aria-hidden="true"><span class="char accent">/</span><span class="char">s</span><span class="char">ɪ</span><span class="char">ɡ</span><span class="char accent">ˈ</span><span class="char">n</span><span class="char">ɑ</span><span class="char accent">ː</span><span class="char">l</span><span class="char accent">/</span></div>
+      <div class="wordmark wordmark-ghost ghost-right" aria-label="signal"><span class="char accent">/</span><span class="char">s</span><span class="char">ɪ</span><span class="char">ɡ</span><span class="char accent">ˈ</span><span class="char">n</span><span class="char">ɑ</span><span class="char accent">ː</span><span class="char">l</span><span class="char accent">/</span></div>
+    </div>
+  </div>
+  <div class="scroll-indicator"></div>
+</section>
+
+<!-- ==================== QUOTE BAND — single-line scrolling Szent-Györgyi ==================== -->
+<section class="quote-band">
+  <div class="marquee-track">
+    <span class="quote-item">
+      <span class="szent-quote">&ldquo;a living cell requires energy not only for all its functions, but also for the maintenance of its structure. without energy life would be extinguished instantaneously, and the cellular fabric would collapse.&rdquo;</span>
+      <span class="szent-attribution">ALBERT SZENT-GY&Ouml;RGYI &middot; NOBEL LECTURE 1937</span>
+    </span>
+    <span class="quote-divider">/</span>
+    <span class="quote-item">
+      <span class="szent-quote">&ldquo;a living cell requires energy not only for all its functions, but also for the maintenance of its structure. without energy life would be extinguished instantaneously, and the cellular fabric would collapse.&rdquo;</span>
+      <span class="szent-attribution">ALBERT SZENT-GY&Ouml;RGYI &middot; NOBEL LECTURE 1937</span>
+    </span>
+    <span class="quote-divider">/</span>
+    <span class="quote-item">
+      <span class="szent-quote">&ldquo;a living cell requires energy not only for all its functions, but also for the maintenance of its structure. without energy life would be extinguished instantaneously, and the cellular fabric would collapse.&rdquo;</span>
+      <span class="szent-attribution">ALBERT SZENT-GY&Ouml;RGYI &middot; NOBEL LECTURE 1937</span>
+    </span>
+    <span class="quote-divider">/</span>
+  </div>
+</section>
+
+<!-- ==================== 2 • SENSATION (condensed) ==================== -->
+<section class="sensation">
+  <div class="line-1 reveal">the daily foundation that <em>actually</em> tastes good.</div>
+  <div class="line-support reveal delay-1">you feel it the second you bite down.</div>
+  <div class="line-specs reveal delay-2">
+    <span>two chews</span>
+    <span class="dot"></span>
+    <span>~3 minutes</span>
+    <span class="dot"></span>
+    <span>no water</span>
+    <span class="dot"></span>
+    <span>on your time</span>
+  </div>
+</section>
+
+<!-- ==================== 3 • PROMISE ==================== -->
+<section class="promise">
+  <div class="category-label reveal">
+    <span class="sku-badge">the flagship</span>
+    <span class="equals">=</span>
+    <span class="category-type">foundation</span>
+  </div>
+  <div class="category-rationale reveal delay-1">the daily practice every supplement stack is missing.</div>
+  <div class="headline reveal delay-1">the chew at the <span class="highlight">core</span> of the daily practice.</div>
+  <div class="body reveal delay-2">your stack feeds cells. signal is the foundation that makes the feeding work. additive to every supplement on your shelf.</div>
+</section>
+
+<!-- ==================== TWO-TIER TRANSITIONAL FLAVOR PROFILE — N°001 expression, consumer-feelable architecture ==================== -->
+<div class="sku-marquee">
+  <div class="marquee-track">
+    <!-- PHASE 1 — the bright bite -->
+    <div class="sku-card">
+      <div class="sku-order">phase 01</div>
+      <div class="sku-status">0&ndash;5 SEC</div>
+      <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
+      <div class="sku-separator"></div>
+      <div class="sku-name">the bright bite</div>
+      <div class="sku-promise">allulose shell. clean break. cool.</div>
+    </div>
+    <!-- PHASE 2 — the warm heart -->
+    <div class="sku-card">
+      <div class="sku-order">phase 02</div>
+      <div class="sku-status">10–30 SEC</div>
+      <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
+      <div class="sku-separator"></div>
+      <div class="sku-name">the warm heart</div>
+      <div class="sku-promise">matrix dissolves. mid notes bloom.</div>
+    </div>
+    <!-- PHASE 3 — the lingering close -->
+    <div class="sku-card">
+      <div class="sku-order">phase 03</div>
+      <div class="sku-status">30–60 SEC</div>
+      <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
+      <div class="sku-separator"></div>
+      <div class="sku-name">the lingering close</div>
+      <div class="sku-promise">base notes carry. satisfying.</div>
+    </div>
+    <!-- POST-CHEW — grounded clarity -->
+    <div class="sku-card">
+      <div class="sku-order">body-feel</div>
+      <div class="sku-status">20–60 MIN</div>
+      <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
+      <div class="sku-separator"></div>
+      <div class="sku-name">grounded clarity</div>
+      <div class="sku-promise">warm. settled. no caffeine ramp.</div>
+    </div>
+    <!-- DUAL-CHEW ARCHITECTURE -->
+    <div class="sku-card">
+      <div class="sku-order">chew a</div>
+      <div class="sku-status">SUBSTRATE</div>
+      <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
+      <div class="sku-separator"></div>
+      <div class="sku-name">the substrates</div>
+      <div class="sku-promise">what your cells burn.</div>
+    </div>
+    <div class="sku-card">
+      <div class="sku-order">chew b</div>
+      <div class="sku-status">KEYSTONE</div>
+      <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
+      <div class="sku-separator"></div>
+      <div class="sku-name">the machinery</div>
+      <div class="sku-promise">what keeps it running.</div>
+    </div>
+    <!-- duplicate for seamless loop -->
+    <div class="sku-card">
+      <div class="sku-order">phase 01</div><div class="sku-status">0&ndash;5 SEC</div>
+      <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
+      <div class="sku-separator"></div><div class="sku-name">the bright bite</div><div class="sku-promise">allulose shell. clean break. cool.</div>
+    </div>
+    <div class="sku-card">
+      <div class="sku-order">phase 02</div><div class="sku-status">10–30 SEC</div>
+      <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
+      <div class="sku-separator"></div><div class="sku-name">the warm heart</div><div class="sku-promise">matrix dissolves. mid notes bloom.</div>
+    </div>
+    <div class="sku-card">
+      <div class="sku-order">phase 03</div><div class="sku-status">30–60 SEC</div>
+      <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
+      <div class="sku-separator"></div><div class="sku-name">the lingering close</div><div class="sku-promise">base notes carry. satisfying.</div>
+    </div>
+    <div class="sku-card">
+      <div class="sku-order">body-feel</div><div class="sku-status">20–60 MIN</div>
+      <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
+      <div class="sku-separator"></div><div class="sku-name">grounded clarity</div><div class="sku-promise">warm. settled. no caffeine ramp.</div>
+    </div>
+    <div class="sku-card">
+      <div class="sku-order">chew a</div><div class="sku-status">SUBSTRATE</div>
+      <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
+      <div class="sku-separator"></div><div class="sku-name">the substrates</div><div class="sku-promise">what your cells burn.</div>
+    </div>
+    <div class="sku-card">
+      <div class="sku-order">chew b</div><div class="sku-status">KEYSTONE</div>
+      <div class="sku-wordmark" aria-label="signal"><span class="accent">/</span>sɪɡ<span class="accent">ˈ</span>nɑ<span class="accent">ː</span>l<span class="accent">/</span></div>
+      <div class="sku-separator"></div><div class="sku-name">the machinery</div><div class="sku-promise">what keeps it running.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 4 • THREE TRUTHS ==================== -->
+<section class="truths">
+  <div class="truths-grid">
+    <div class="truth-card reveal" data-hover>
+      <span class="num">01</span>
+      <div class="statement">every ingredient named. every dose printed. &ldquo;proprietary blend&rdquo; = red flag.</div>
+    </div>
+    <div class="truth-card reveal delay-1" data-hover>
+      <span class="num">02</span>
+      <div class="statement">fewer inactives. every active earns its spot. flavor from fruit, not a lab.</div>
+    </div>
+    <div class="truth-card reveal delay-2" data-hover>
+      <span class="num">03</span>
+      <div class="statement">based in science, not bro science. clinical doses. receipts in the appendix.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 5 • TENSION ==================== -->
+<section class="tension">
+  <div class="tension-reject reveal" aria-hidden="true">
+    <div class="torn-half torn-left"><img src="gummy_bear.png" alt=""></div>
+    <div class="torn-half torn-right"><img src="gummy_bear.png" alt=""></div>
+  </div>
+  <div class="tension-reject-caption reveal delay-1">not a gummy.</div>
+  <div class="tension-reject-sublabel reveal delay-1">not another supplement</div>
+  <div class="main reveal delay-2">we're doing the <em>real</em> work in private.</div>
+  <div class="sub reveal delay-2">a format nobody's doing. a thesis the category hasn't heard yet. the people in the room get the full build.</div>
+  <div class="call reveal delay-3">want in? send a signal.</div>
+</section>
+
+<!-- ==================== 6 • CTA ==================== -->
+<section class="cta">
+  <div class="launch-badge reveal"><span>foundation starter</span> Q4 2026 · <span>flagship</span> 2027</div>
+  <div class="cta-prompt reveal delay-1">leave a note. we'll reach out personally.</div>
+  <a class="cta-button reveal delay-2" href="mailto:damon.sun@insdrwellness.com?subject=signal%20%E2%80%94%20I%27m%20interested&body=hi%20damon%2C%0A%0AI%20saw%20the%20signal%20teaser.%20tell%20me%20more.%0A%0A" data-hover>SEND A SIGNAL</a>
+  <div class="cta-fine-print reveal delay-3">or DM <a href="https://instagram.com/chew_signal" target="_blank" rel="noopener" style="color: inherit; text-decoration: underline; text-underline-offset: 3px;">@chew_signal</a></div>
+  <div class="cta-fine-print reveal delay-3" style="margin-top: 10px; opacity: 0.22;">no spam. no newsletter. one personal reply.</div>
+</section>
+
+<!-- ==================== 7 • CLOSE ==================== -->
+<section class="close">
+  <div class="wordmark wordmark-small" aria-label="signal"><span class="char accent">/</span><span class="char">s</span><span class="char">ɪ</span><span class="char">ɡ</span><span class="char accent">ˈ</span><span class="char">n</span><span class="char">ɑ</span><span class="char accent">ː</span><span class="char">l</span><span class="char accent">/</span></div>
+  <div class="company-line"><img src="logo/insdr_logo_light.png" alt="INSDR" class="insdr-logo"> WELLNESS &mdash; THE CELLCARE COMPANY · 2026</div>
+  <div class="founder-signal">made by damon. first product. accept no trend-chasers.</div>
+  <div class="confidentiality">shared with you personally. please don't post publicly.</div>
+</section>
+
+<script>
+  // Scroll reveals
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
+
+  /* Floating packet — follows cursor with eased lerp. Disabled on touch/mobile. Hidden while locked. */
+  (function() {
+    if (window.matchMedia('(max-width: 768px)').matches) return;
+    if (window.matchMedia('(hover: none)').matches) return;
+    const packets = document.querySelectorAll('#floatingPacketFront, #floatingPacketBack');
+    if (!packets.length) return;
+    let tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
+    const setDefault = () => {
+      tx = window.innerWidth * 0.85; ty = window.innerHeight * 0.82;
+      cx = tx; cy = ty;
+      packets.forEach(p => { p.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`; });
+    };
+    setDefault();
+    document.addEventListener('mousemove', (e) => {
+      tx = e.clientX + 70; ty = e.clientY + 60;
+      if (!raf) animate();
+    });
+    const animate = () => {
+      cx += (tx - cx) * 0.09; cy += (ty - cy) * 0.09;
+      packets.forEach(p => { p.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`; });
+      if (Math.abs(tx - cx) > 0.3 || Math.abs(ty - cy) > 0.3) raf = requestAnimationFrame(animate);
+      else raf = null;
+    };
+    window.addEventListener('resize', setDefault);
+  })();
+</script>
+
+
+<script>
+  /* Signal entrainment engine — two-frequencies-syncing audio + double wordmark convergence.
+     Concept: attraction's physiological entrainment made audible+visible. */
+  (function() {
+    let audioCtx = null;
+    let hasFired = false;
+    let isMuted = sessionStorage.getItem('signal_ping_muted') === 'true';
+    let hasGesture = false;
+    let coverInView = false;
+    const DRIFT_DURATION = 2.0, HOLD_DURATION = 0.8, DECAY_DURATION = 2.5, LANDING_PITCH = 440, INITIAL_OFFSET = 10;
+    const VISUAL_CONVERGENCE_DURATION = DRIFT_DURATION + HOLD_DURATION + DECAY_DURATION;  // 5.3s — visual spans full audio event
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) isMuted = true;
+    function getCtx() {
+      if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; } }
+      return audioCtx;
+    }
+    function resetVisualSplit(instant) {
+      const gL = document.querySelector('.ghost-left');
+      const gR = document.querySelector('.ghost-right');
+      if (!gL || !gR) return;
+      if (instant) { gL.style.transition = 'none'; gR.style.transition = 'none'; }
+      gL.style.transform = 'translateX(-7px)'; gR.style.transform = 'translateX(7px)';
+      gL.style.opacity = '0.5'; gR.style.opacity = '0.5';
+    }
+    function runVisualConvergence() {
+      const gL = document.querySelector('.ghost-left');
+      const gR = document.querySelector('.ghost-right');
+      if (!gL || !gR) return;
+      resetVisualSplit(true);
+      void gL.offsetWidth;
+      const visualMs = VISUAL_CONVERGENCE_DURATION * 1000;
+      gL.style.transition = 'transform ' + visualMs + 'ms cubic-bezier(0.45, 0, 0.2, 1), opacity ' + visualMs + 'ms ease';
+      gR.style.transition = 'transform ' + visualMs + 'ms cubic-bezier(0.45, 0, 0.2, 1), opacity ' + visualMs + 'ms ease';
+      gL.style.transform = 'translateX(0)'; gR.style.transform = 'translateX(0)';
+    }
+    function playEntrainmentEvent() {
+      if (isMuted) return;
+      const ctx = getCtx(); if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+      const t = ctx.currentTime + 0.02;
+      const master = ctx.createGain();
+      master.gain.setValueAtTime(0.0001, t);
+      master.gain.exponentialRampToValueAtTime(0.35, t + 0.25);
+      master.gain.setValueAtTime(0.35, t + DRIFT_DURATION);
+      master.gain.setValueAtTime(0.35, t + DRIFT_DURATION + HOLD_DURATION);
+      master.gain.exponentialRampToValueAtTime(0.0001, t + DRIFT_DURATION + HOLD_DURATION + DECAY_DURATION);
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(1400, t);
+      filter.frequency.linearRampToValueAtTime(2400, t + DRIFT_DURATION);
+      filter.frequency.linearRampToValueAtTime(1600, t + DRIFT_DURATION + HOLD_DURATION + DECAY_DURATION * 0.6);
+      filter.Q.value = 0.5;
+      master.connect(filter); filter.connect(ctx.destination);
+      const stereo = ctx.createChannelMerger(2);
+      const leftBus = ctx.createGain(); leftBus.gain.value = 1.0;
+      const rightBus = ctx.createGain(); rightBus.gain.value = 1.0;
+      leftBus.connect(stereo, 0, 0); rightBus.connect(stereo, 0, 1);
+      stereo.connect(master);
+      const oscA = ctx.createOscillator();
+      oscA.type = 'sine'; oscA.frequency.setValueAtTime(LANDING_PITCH, t);
+      const gA = ctx.createGain(); gA.gain.value = 0.55;
+      oscA.connect(gA); gA.connect(leftBus);
+      const oscB = ctx.createOscillator();
+      oscB.type = 'sine';
+      oscB.frequency.setValueAtTime(LANDING_PITCH + INITIAL_OFFSET, t);
+      oscB.frequency.linearRampToValueAtTime(LANDING_PITCH, t + DRIFT_DURATION);
+      const gB = ctx.createGain(); gB.gain.value = 0.55;
+      oscB.connect(gB); gB.connect(rightBus);
+      const oscSub = ctx.createOscillator();
+      oscSub.type = 'sine'; oscSub.frequency.value = LANDING_PITCH / 2;
+      const gSub = ctx.createGain();
+      gSub.gain.setValueAtTime(0, t);
+      gSub.gain.setValueAtTime(0, t + DRIFT_DURATION * 0.7);
+      gSub.gain.linearRampToValueAtTime(0.28, t + DRIFT_DURATION);
+      gSub.gain.exponentialRampToValueAtTime(0.001, t + DRIFT_DURATION + HOLD_DURATION + DECAY_DURATION);
+      oscSub.connect(gSub); gSub.connect(leftBus); gSub.connect(rightBus);
+      const oscTop = ctx.createOscillator();
+      oscTop.type = 'sine'; oscTop.frequency.value = LANDING_PITCH * 2;
+      const gTop = ctx.createGain();
+      gTop.gain.setValueAtTime(0, t);
+      gTop.gain.setValueAtTime(0, t + DRIFT_DURATION * 0.85);
+      gTop.gain.linearRampToValueAtTime(0.09, t + DRIFT_DURATION + 0.15);
+      gTop.gain.exponentialRampToValueAtTime(0.0001, t + DRIFT_DURATION + HOLD_DURATION + DECAY_DURATION * 0.8);
+      oscTop.connect(gTop); gTop.connect(leftBus); gTop.connect(rightBus);
+      const dL = ctx.createDelay(3); dL.delayTime.value = 0.47;
+      const dR = ctx.createDelay(3); dR.delayTime.value = 0.68;
+      const dLg = ctx.createGain(); dLg.gain.value = 0.22;
+      const dRg = ctx.createGain(); dRg.gain.value = 0.18;
+      const dMerger = ctx.createChannelMerger(2);
+      master.connect(dL); dL.connect(dLg); dLg.connect(dMerger, 0, 0);
+      master.connect(dR); dR.connect(dRg); dRg.connect(dMerger, 0, 1);
+      dMerger.connect(ctx.destination);
+      const stopT = t + DRIFT_DURATION + HOLD_DURATION + DECAY_DURATION + 0.2;
+      [oscA, oscB, oscSub, oscTop].forEach(function(o) { o.start(t); o.stop(stopT); });
+    }
+    function fireEvent() { runVisualConvergence(); playEntrainmentEvent(); }
+    function startOnce() { if (hasFired || isMuted) return; hasFired = true; fireEvent(); }
+    function maybeStart() { if (hasGesture && coverInView && !isMuted) startOnce(); }
+    const origCheck = window.checkPass;
+    if (typeof origCheck === 'function') {
+      window.checkPass = function(e) {
+        const r = origCheck(e);
+        if (!document.body.classList.contains('locked')) { hasGesture = true; maybeStart(); }
+        return r;
+      };
+    }
+    ['click', 'touchstart', 'keydown'].forEach(function(evt) {
+      document.addEventListener(evt, function once() {
+        hasGesture = true; maybeStart();
+        document.removeEventListener(evt, once);
+      }, { once: true, capture: true });
+    });
+    function bindObserver() {
+      const cover = document.querySelector('.cover') || document.querySelector('.arrival');
+      if (!cover) return;
+      const io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          coverInView = entry.intersectionRatio > 0.3;
+          if (coverInView) maybeStart();
+        });
+      }, { threshold: [0, 0.3, 0.6, 1.0] });
+      io.observe(cover);
+    }
+    function bindMuteButton() {
+      if (document.getElementById('pingMuteBtn')) return;
+      const btn = document.createElement('button');
+      btn.id = 'pingMuteBtn';
+      btn.setAttribute('aria-label', 'toggle signal sound');
+      btn.setAttribute('title', 'toggle signal sound');
+      btn.innerHTML = isMuted ? svgOff() : svgOn();
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        isMuted = !isMuted;
+        sessionStorage.setItem('signal_ping_muted', String(isMuted));
+        btn.innerHTML = isMuted ? svgOff() : svgOn();
+        if (!isMuted) { hasGesture = true; maybeStart(); }
+      });
+      document.body.appendChild(btn);
+    }
+    function svgOn() { return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>'; }
+    function svgOff() { return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>'; }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() { bindObserver(); bindMuteButton(); resetVisualSplit(true); });
+    } else { bindObserver(); bindMuteButton(); resetVisualSplit(true); }
+  })();
+</script>
+
+</body>
+</html>
