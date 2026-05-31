@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* --- PASSWORD GATE --- */
-  #gate { position: fixed; inset: 0; background: #1A1410; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; color: #F6EFEA; cursor: auto; }
+  #gate { position: fixed; inset: 0; background: #4A2540; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; color: #F6EFEA; cursor: auto; }
   #gate::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(173,66,54,0.18) 0%, transparent 70%); pointer-events: none; animation: gate-breathe 4s ease-in-out infinite; }
   @keyframes gate-breathe { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; } 50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; } }
   #gate .gate-overline { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #AD4236; margin-bottom: 20px; font-weight: 600; position: relative; }
@@ -63,8 +63,8 @@
     --signal-light: #c4574b;
     --signal-deep: #7a2e25;
     --rose-linen: #F6EFEA;
-    --deep-evening: #1A1410;
-    --deep-evening-soft: #2a2420;
+    --deep-evening: #4A2540;
+    --deep-evening-soft: #5A3550;
     --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
     --font-display: 'Anguita Sans', 'Bebas Neue', Impact, sans-serif;
     --font-condensed: 'Bebas Neue', 'Anguita Sans', Impact, sans-serif;
@@ -348,7 +348,7 @@
     height: 380px;
     border-radius: 10px;
     position: relative;
-    background: linear-gradient(155deg, #231a15 0%, #1A1410 100%);
+    background: linear-gradient(155deg, #3A1D33 0%, #4A2540 100%);
     border: 1px solid rgba(173,66,54,0.22);
     display: flex;
     flex-direction: column;
